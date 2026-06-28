@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Game Programmer</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- GSAP for Awwwards-style animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+
+    <!-- LAYER 1: The Intro / Game Start Screen -->
+    <div id="intro-screen">
+        <div id="loading-text">Loading Assets...</div>
+        <button id="start-btn" style="display: none;">Game Start</button>
+    </div>
+
+    <!-- LAYER 2: The Main Website (Hidden until start) -->
+    <main id="main-content">
+        <!-- Cinematic Genshin-style Hero Section -->
+        <section id="hero">
+            <div class="video-background">
+                <!-- Replace with your unlisted YouTube/Vimeo embed later -->
+                <div class="placeholder-bg"></div>
+            </div>
+            <div class="hero-content">
+                <h1 class="reveal-text">System Ready.</h1>
+                <p class="reveal-text">C++ & Unreal Engine 5 Developer</p>
+            </div>
+        </section>
+
+        <!-- Portfolio Projects Grid -->
+        <section id="portfolio">
+            <h2>Recent Operations</h2>
+            <div id="project-grid"></div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
