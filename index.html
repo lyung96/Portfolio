@@ -1,42 +1,1905 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Game Programmer</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- GSAP for Awwwards-style animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Vincent Lin — Game Programmer / Technical Artist</title>
+<meta name="description" content="An enthusiastic game programmer bridging artistic vision with technical implementation across Unreal Engine and Unity. Currently building immersive experiences at Nimbus Games.">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{
+  --bg:#09080A;--bg2:#111018;--bg3:#1A1720;--border:#28242E;
+  --text:#E5DDD0;--dim:#8A7E70;--dimmer:#4A443E;
+  --accent:#C8A96E;--adim:rgba(200,169,110,.13);
+  --green:#7CB99A;--blue:#7CA8B9;--purple:#A89BD4;--orange:#C89A6E;
+  --mono:"Space Mono",monospace;--sans:"Plus Jakarta Sans","Noto Sans JP",sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+
+#page{height:100%;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;position:relative;z-index:0}
+#page::-webkit-scrollbar{width:4px}
+#page::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+#cv{position:fixed;inset:0;z-index:1;pointer-events:none}
+#grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.038;
+  background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJuIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjY1IiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9Ii40Ii8+PC9zdmc+");
+  animation:grn .22s steps(1) infinite}
+@keyframes grn{0%{transform:translate(0,0)}33%{transform:translate(-2%,-3%)}66%{transform:translate(3%,1%)}100%{transform:translate(-1%,2%)}}
+
+#loader{position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;padding:9vh 9vw;overflow:hidden}
+#loader.out{animation:lWipe .75s cubic-bezier(.77,0,.18,1) both}
+@keyframes lWipe{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0)}}
+#ja-bg{position:absolute;inset:0;pointer-events:none;font-family:var(--mono);font-size:.66rem;line-height:1.72;color:rgba(255,255,255,.022);padding:1rem;word-break:break-all;overflow:hidden}
+.l-eye{font-family:var(--mono);font-size:.54rem;letter-spacing:.3em;color:rgba(255,255,255,.22);margin-bottom:1rem;position:relative;z-index:1}
+.l-name{font-family:var(--mono);font-size:clamp(1.8rem,5.5vw,4.2rem);font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1;margin-bottom:.4rem;position:relative;z-index:1}
+.l-role{font-family:var(--mono);font-size:clamp(.58rem,1.3vw,.78rem);color:rgba(255,255,255,.26);letter-spacing:.18em;position:relative;z-index:1}
+.l-spacer{flex:1}
+.l-msgs{margin-bottom:2rem;position:relative;z-index:1}
+.l-msg{font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.28);line-height:2.1;opacity:0;animation:mIn .1s ease both;letter-spacing:.04em}
+.l-msg::before{content:"> ";color:rgba(255,255,255,.14)}
+@keyframes mIn{to{opacity:1}}
+.l-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;position:relative;z-index:1}
+.l-ba{flex:1;max-width:380px}
+.l-cnt{font-family:var(--mono);font-size:.52rem;color:rgba(255,255,255,.22);letter-spacing:.15em;margin-bottom:.55rem}
+.l-bar{height:1px;background:rgba(255,255,255,.08)}
+.l-fill{height:1px;width:0;background:rgba(255,255,255,.78);transition:width .35s ease}
+.l-wel{font-family:var(--mono);font-size:.52rem;letter-spacing:.28em;color:rgba(255,255,255,0);transition:color .7s;text-transform:uppercase}
+.l-wel.show{color:rgba(255,255,255,.35)}
+
+#nav{position:fixed;top:0;left:0;right:0;z-index:500;height:48px;
+  display:flex;align-items:center;justify-content:space-between;padding:0 1.6rem;gap:1rem;
+  transition:background .4s,border-color .4s}
+#nav.solid{background:rgba(9,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--mono);font-size:.76rem;font-weight:700;letter-spacing:.12em;cursor:pointer;white-space:nowrap}
+.nav-links{display:flex;gap:1.5rem;align-items:center}
+.nav-link{font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.45);letter-spacing:.08em;cursor:pointer;transition:color .2s;position:relative;white-space:nowrap}
+.nav-link:hover,.nav-link.active{color:var(--text)}
+.nav-link.active::after{content:"";position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--accent)}
+.nav-r{display:flex;align-items:center;gap:.65rem;flex-shrink:0}
+.nav-resume,.nav-contact{font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;padding:.3rem .75rem;border-radius:5px;cursor:pointer;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:.35rem}
+.nav-resume{color:var(--dim);border:1px solid var(--border)}
+.nav-resume:hover{color:var(--text);border-color:rgba(255,255,255,.28)}
+.nav-contact{color:var(--bg);background:var(--accent);border:1px solid var(--accent);font-weight:700}
+.nav-contact:hover{opacity:.88}
+.nav-mute{font-size:.88rem;opacity:.55;cursor:pointer;padding:.2rem .35rem}
+.nav-mute:hover{opacity:1}
+
+#s-hero{height:100vh;display:flex;flex-direction:column;overflow:hidden;scroll-snap-align:start;position:relative}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.bg-glow{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none}
+.bg-g1{width:60vw;height:60vh;top:-10vh;left:5%;background:rgba(168,155,212,.03);animation:gl 18s ease-in-out infinite alternate}
+.bg-g2{width:50vw;height:50vh;bottom:-5vh;right:2%;background:rgba(200,169,110,.028);animation:gl 24s ease-in-out 5s infinite alternate-reverse}
+@keyframes gl{from{transform:scale(1)}to{transform:scale(1.2) translate(3%,-4%)}}
+.hero-bg-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.22;pointer-events:none;z-index:0}
+.hero-content{position:relative;z-index:3;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 2rem;margin-top:48px}
+.hero-eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.35em;color:rgba(255,255,255,.28);margin-bottom:1.5rem}
+.hero-name{font-family:var(--mono);font-size:clamp(3rem,9vw,6.8rem);font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1;margin-bottom:.55rem}
+.hero-jp{font-family:var(--sans);font-size:clamp(.9rem,2vw,1.25rem);font-weight:300;color:rgba(255,255,255,.28);letter-spacing:.35em;margin-bottom:.75rem}
+.hero-role{font-family:var(--mono);font-size:clamp(.66rem,1.4vw,.85rem);color:rgba(255,255,255,.42);letter-spacing:.18em}
+.hero-scroll{position:relative;z-index:3;padding:0 0 2rem;display:flex;flex-direction:column;align-items:center;gap:.55rem}
+.scroll-label{font-family:var(--mono);font-size:.5rem;letter-spacing:.25em;color:rgba(255,255,255,.28);text-transform:uppercase}
+.scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,rgba(255,255,255,.35),transparent)}
+
+#s-desk{height:100vh;overflow:hidden;scroll-snap-align:start;position:relative}
+#wins{position:absolute;inset:0;z-index:10}
+.win{position:absolute;display:flex;flex-direction:column;background:rgba(17,16,24,.96);backdrop-filter:blur(14px);
+  border:1px solid var(--border);border-radius:10px;box-shadow:0 24px 72px rgba(0,0,0,.9);min-width:220px;min-height:130px;user-select:none}
+.win.focus{border-color:rgba(200,169,110,.32)}
+.win.gone{display:none}
+.wbar{height:34px;background:rgba(22,20,30,.98);border-radius:10px 10px 0 0;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 .8rem;cursor:move;flex-shrink:0;position:relative}
+.wdots{display:flex;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;cursor:pointer}
+.dr{background:#FF5F57}.dy{background:#FFBD2E}.dg{background:#28C840}
+.wtitle{position:absolute;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.62rem;font-weight:700;color:var(--dim)}
+.wbody{flex:1;overflow:auto;border-radius:0 0 10px 10px}
+.wbody::-webkit-scrollbar{width:3px}
+.wbody::-webkit-scrollbar-thumb{background:var(--border)}
+.wrsz{position:absolute;bottom:0;right:0;width:14px;height:14px;cursor:se-resize}
+
+.tc{padding:.9rem 1.1rem;font-family:var(--mono);font-size:.7rem;line-height:1.85}
+.tl{display:block;white-space:pre-wrap}
+.kw{color:var(--purple)}.fn{color:var(--blue)}.st{color:var(--green)}.nm{color:var(--orange)}.cm{color:var(--dimmer);font-style:italic}.dk{color:var(--dim)}
+.cli-wrap{margin-top:.65rem;padding-top:.65rem;border-top:1px solid var(--border)}
+.cli-row{display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.68rem}
+.cli-prompt{color:var(--accent)}
+.cli-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--mono);font-size:.68rem}
+
+.ab{padding:1.05rem}
+.ab-top{display:flex;gap:.8rem;align-items:flex-start;margin-bottom:.8rem}
+.ab-av{width:56px;height:56px;border-radius:50%;overflow:hidden;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+.ab-av img{width:100%;height:100%;object-fit:cover}
+.ab-name{font-family:var(--mono);font-size:.86rem;font-weight:700;margin-bottom:.15rem}
+.ab-role{font-family:var(--mono);font-size:.58rem;color:var(--dim);line-height:1.6}
+.ab-bio{font-size:.78rem;color:var(--dim);line-height:1.72;margin-bottom:.8rem}
+.ab-div{height:1px;background:var(--border);margin:.75rem 0}
+.ab-lnks{display:flex;flex-wrap:wrap;gap:.75rem}
+.ab-lnk{font-family:var(--mono);font-size:.6rem;color:var(--dim)}
+.ab-lnk:hover{color:var(--accent)}
+
+.exp-wrap{padding:.95rem 1.05rem}
+.exp-item{margin-bottom:1rem;padding-bottom:.9rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.exp-item:last-child{border-bottom:none}
+.exp-yr{font-family:var(--mono);font-size:.56rem;color:var(--dimmer);margin-bottom:.2rem}
+.exp-org{font-family:var(--mono);font-size:.76rem;font-weight:700}
+.exp-role{font-family:var(--mono);font-size:.58rem;color:var(--accent);margin:.12rem 0 .28rem}
+.exp-desc{font-size:.74rem;color:var(--dim);line-height:1.6}
+.exp-tags{font-family:var(--mono);font-size:.54rem;color:var(--dimmer);margin-top:.32rem}
+
+.sk-wrap{position:relative;width:100%;height:100%;overflow:hidden}
+.sk-chip{position:absolute;left:0;top:0;font-family:var(--mono);font-size:.58rem;padding:.2rem .6rem;border-radius:20px;background:rgba(255,255,255,.05);color:var(--dim);border:1px solid rgba(255,255,255,.08);cursor:grab;white-space:nowrap;user-select:none}
+.sk-chip.held{border-color:var(--accent);color:var(--accent);background:var(--adim);z-index:99}
+.sk-cat-lbl{position:absolute;font-family:var(--mono);font-size:.5rem;letter-spacing:.12em;color:var(--dimmer);text-transform:uppercase;pointer-events:none}
+
+.exp-tb{padding:.44rem .82rem;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:.54rem;color:var(--dim);display:flex;align-items:center;justify-content:space-between}
+.exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:.55rem;padding:.75rem}
+.ffile{display:flex;flex-direction:column;overflow:hidden;border-radius:9px;border:1px solid var(--border);background:#14121B;cursor:pointer;position:relative;transition:transform .25s,border-color .25s,box-shadow .25s}
+.ffile:hover{transform:translateY(-3px);border-color:rgba(200,169,110,.7);box-shadow:0 10px 26px rgba(0,0,0,.65)}
+.ffile.feat{border-color:rgba(200,169,110,.5);box-shadow:0 6px 24px rgba(200,169,110,.14)}
+.ff-cov{height:58px;width:100%;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.06);background:#0D0C12;display:flex;align-items:center;justify-content:center}
+.ff-cov img{width:100%;height:100%;object-fit:cover;opacity:.75;transition:transform .4s,opacity .4s}
+.ffile:hover .ff-cov img{transform:scale(1.08);opacity:1}
+.ff-body{padding:.55rem .65rem;display:flex;flex-direction:column;gap:.25rem;flex:1}
+.ff-icon{font-size:1.35rem}
+.ff-name{font-family:var(--mono);font-size:.66rem;font-weight:700;color:var(--text)}
+.ffile:hover .ff-name{color:var(--accent)}
+.ff-yr{font-family:var(--mono);font-size:.54rem;color:var(--dim)}
+.ff-cta{margin-top:.3rem;padding-top:.3rem;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;font-family:var(--mono);font-size:.52rem;color:var(--dim)}
+.ffile:hover .ff-cta span:last-child{color:var(--accent)}
+.ff-latest{position:absolute;top:5px;right:5px;font-family:var(--mono);font-size:.46rem;color:var(--accent);font-weight:700;background:rgba(9,8,10,.85);padding:2px 5px;border-radius:4px}
+.ps-ref-link{display:inline-flex;align-items:center;gap:2px;margin:0 2px;padding:1px 6px;border-radius:4px;border-bottom:1px solid rgba(200,169,110,.75);background:rgba(200,169,110,.15);color:var(--accent);font-weight:600;cursor:pointer;transition:background .2s}
+.ps-ref-link:hover{background:rgba(200,169,110,.28)}
+
+#map-wrap{height:100%;width:100%;position:relative}
+#lmap{height:100%;width:100%}
+.map-pin{position:absolute;bottom:8px;left:8px;z-index:999;font-family:var(--mono);font-size:.56rem;background:rgba(9,8,10,.9);padding:.25rem .58rem;border-radius:4px;border:1px solid var(--border);color:var(--text);display:inline-flex;align-items:center;gap:5px;transition:border-color .2s,color .2s}
+.map-pin:hover{border-color:rgba(200,169,110,.7);color:var(--accent)}
+
+#social{position:absolute;bottom:64px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1rem;z-index:20}
+.sb-lnk{font-family:var(--mono);font-size:.58rem;color:var(--dim)}
+.sb-lnk:hover{color:var(--accent)}
+#dock{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(14,12,18,.92);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:13px;padding:.36rem .52rem;display:flex;gap:.25rem;z-index:20}
+.dki{display:flex;flex-direction:column;align-items:center;gap:2px;padding:.24rem .45rem;border-radius:7px;cursor:pointer}
+.dki:hover{background:rgba(255,255,255,.06)}
+.dki.on{background:var(--adim)}
+.dki-ico{font-size:1.15rem}
+.dki-lbl{font-family:var(--mono);font-size:.45rem;color:var(--dim)}
+
+#s-art{min-height:100vh;background:var(--bg);padding:5.5rem 5% 4rem;scroll-snap-align:start}
+.art-header{text-align:center;margin-bottom:3rem}
+.art-eyebrow{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;color:var(--accent);margin-bottom:.6rem}
+.art-title{font-family:var(--mono);font-size:clamp(1.4rem,4vw,2.2rem);font-weight:700;margin-bottom:.5rem}
+.art-sub{font-size:.85rem;color:var(--dim)}
+.art-grid{columns:3 240px;gap:1.15rem;max-width:1100px;margin:0 auto}
+.art-item{break-inside:avoid;margin-bottom:1.15rem;cursor:pointer;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg2);transition:border-color .2s,transform .2s}
+.art-item:hover{border-color:rgba(200,169,110,.45);transform:translateY(-2px)}
+.art-item img,.art-item video{width:100%;display:block}
+.art-cap{padding:.65rem .8rem}
+.art-cap-t{font-family:var(--mono);font-size:.64rem}
+.art-cap-m{font-family:var(--mono);font-size:.54rem;color:var(--dim);margin-top:.15rem}
+.art-footer{max-width:1100px;margin:4rem auto 0;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.art-footer-copy{font-family:var(--mono);font-size:.58rem;color:var(--dimmer)}
+.art-footer-links{display:flex;gap:1.2rem}
+.art-fl{font-family:var(--mono);font-size:.6rem;color:var(--dim)}
+.art-fl:hover{color:var(--accent)}
+
+#po{position:fixed;inset:0;z-index:800;background:var(--bg);overflow-y:auto;transform:translateY(100%);transition:transform .48s cubic-bezier(.77,0,.18,1)}
+#po.open{transform:translateY(0)}
+.po-bar{position:sticky;top:0;background:rgba(9,8,10,.94);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.75rem 5%;z-index:10}
+.po-back,.po-nb{font-family:var(--mono);font-size:.64rem;color:var(--dim)}
+.po-back:hover,.po-nb:hover{color:var(--text)}
+.po-content{max-width:920px;margin:0 auto;padding:2.5rem 5% 5rem}
+.po-title{font-family:var(--mono);font-size:clamp(1.4rem,3.5vw,2.1rem);font-weight:700;margin-bottom:.5rem}
+.po-meta{font-family:var(--mono);font-size:.64rem;color:var(--dim);margin-bottom:.85rem}
+.po-links{display:flex;gap:.9rem;margin-top:.75rem}
+.po-lnk{font-family:var(--mono);font-size:.64rem;color:var(--accent)}
+.ps-h2-wrap{margin:2.5rem 0 .85rem;border-left:2px solid var(--accent);padding-left:.85rem}
+.ps-h2-eye{font-family:var(--mono);font-size:.55rem;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:.2rem}
+.ps-h2{font-family:var(--mono);font-size:clamp(1.15rem,2.6vw,1.6rem);font-weight:700;color:var(--text)}
+.ps-h3{font-family:var(--mono);font-size:.9rem;font-weight:700;color:var(--accent);margin:1.75rem 0 .65rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.ps-p{font-size:.9rem;color:var(--dim);line-height:1.78;margin-bottom:.85rem;white-space:pre-line}
+.ps-p strong,.ps-ul strong{color:var(--text);font-weight:600}
+.ps-ic{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:.86em;color:var(--green)}
+.ps-ul{font-size:.88rem;color:var(--dim);line-height:1.8;padding-left:1.25rem;margin-bottom:.9rem}
+.ps-fig{margin:1.15rem 0}
+.ps-fig img,.ps-fig video{width:100%;border-radius:8px;border:1px solid var(--border);display:block}
+figcaption{font-family:var(--mono);font-size:.58rem;color:var(--dimmer);margin-top:.4rem;text-align:center}
+.ps-yt{position:relative;padding-bottom:56.25%;height:0;margin:1.15rem 0;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.ps-yt iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.ps-code{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:1rem;margin:.9rem 0;overflow-x:auto;font-family:var(--mono);font-size:.7rem;color:var(--green)}
+.ps-hr{border:none;border-top:1px solid var(--border);margin:1.8rem 0}
+.ps-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin:1rem 0}
+.ps-gallery.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:640px){.ps-gallery,.ps-gallery.cols-3{grid-template-columns:1fr}}
+.ps-gallery img,.ps-gallery video{width:100%;border-radius:6px;border:1px solid var(--border);cursor:pointer}
+.ps-gallery figcaption{white-space:pre-line}
+.ps-split{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:center;margin:1.25rem 0}
+@media(max-width:700px){.ps-split{grid-template-columns:1fr}}
+.ps-callout{margin:1.15rem 0;padding:1rem 1.15rem;border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;background:rgba(200,169,110,.06)}
+.ps-callout-lbl{font-family:var(--mono);font-size:.54rem;font-weight:700;letter-spacing:.16em;color:var(--accent);text-transform:uppercase;margin-bottom:.25rem}
+.ps-callout-ttl{font-family:var(--mono);font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+.ps-ext-link{display:inline-flex;align-items:center;gap:2px;margin:0 2px;padding:1px 6px;border-radius:4px;border-bottom:1px solid rgba(124,168,185,.75);background:rgba(124,168,185,.15);color:var(--blue);font-weight:600}
+.media-fallback{background:linear-gradient(135deg,#13111a,#1b1824);border:1px solid var(--border);border-radius:8px;padding:2rem 1rem;text-align:center;font-family:var(--mono);font-size:.66rem;color:var(--dim)}
+
+#lb{position:fixed;inset:0;z-index:1100;background:rgba(5,5,7,.95);display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+#lb.open{display:flex}
+#lb-inner{max-width:980px;width:100%;max-height:80vh;display:flex;align-items:center;justify-content:center}
+#lb-inner img,#lb-inner video{max-width:100%;max-height:76vh;border-radius:8px;border:1px solid var(--border)}
+#lb-cap{margin-top:.9rem;font-family:var(--mono);font-size:.68rem;color:var(--dim);text-align:center}
+#lb-close{position:fixed;top:1.2rem;right:1.5rem;font-family:var(--mono);font-size:1rem;color:var(--text);padding:.4rem .7rem;border:1px solid var(--border);border-radius:6px}
+
+#egg{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.92);display:none;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;text-align:center;padding:2rem}
+#egg.open{display:flex}
+.ee-icon{font-size:3.6rem;margin-bottom:.9rem}
+.ee-title{font-family:var(--mono);font-size:clamp(1.1rem,3vw,1.6rem);font-weight:700;letter-spacing:.18em;color:var(--accent);margin-bottom:.5rem}
+.ee-sub{font-family:var(--mono);font-size:.74rem;color:var(--dim);margin-bottom:.9rem}
+.ee-hint{font-family:var(--mono);font-size:.55rem;color:var(--dimmer)}
+
+@media(max-width:768px){
+  #s-desk{height:auto;min-height:100vh;overflow-y:auto;padding-bottom:2rem}
+  #wins{position:relative;inset:auto;display:flex;flex-direction:column;gap:.75rem;padding:4rem .8rem 1rem}
+  .win{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;min-height:240px}
+  #dock,#social{display:none}
+  .art-grid{columns:1}
+}
+</style>
 </head>
 <body>
-
-    <!-- LAYER 1: The Intro / Game Start Screen -->
-    <div id="intro-screen">
-        <div id="loading-text">Loading Assets...</div>
-        <button id="start-btn" style="display: none;">Game Start</button>
+<canvas id="cv"></canvas>
+<div id="grain"></div>
+<div id="loader">
+  <div id="ja-bg"></div>
+  <div class="l-eye">LOADING PORTFOLIO</div>
+  <div class="l-name" id="l-name"></div>
+  <div class="l-role" id="l-role"></div>
+  <div class="l-spacer"></div>
+  <div class="l-msgs" id="l-msgs"></div>
+  <div class="l-foot">
+    <div class="l-ba"><div class="l-cnt" id="l-cnt">Assets : 0 / 18</div><div class="l-bar"><div class="l-fill" id="l-fill"></div></div></div>
+    <div class="l-wel" id="l-wel">WELCOME</div>
+  </div>
+</div>
+<nav id="nav">
+  <div class="nav-logo" id="nav-logo" onclick="scrollToSec('s-hero')"></div>
+  <div class="nav-links" id="nav-links">
+    <span class="nav-link active" data-sec="s-hero" onclick="scrollToSec('s-hero')">01. Intro</span>
+    <span class="nav-link" data-sec="s-desk" onclick="scrollToSec('s-desk')">02. Terminal</span>
+    <span class="nav-link" data-sec="s-art" onclick="scrollToSec('s-art')">03. Art</span>
+  </div>
+  <div class="nav-r">
+    <a class="nav-resume" id="nav-resume" href="#" target="_blank">Resume</a>
+    <button class="nav-contact" id="nav-contact">Contact</button>
+    <span class="nav-mute" id="nav-mute" onclick="toggleMute()">🔊</span>
+  </div>
+</nav>
+<div id="page">
+  <section id="s-hero">
+    <div class="hero-bg" id="hero-bg">
+      <div class="bg-glow bg-g1"></div>
+      <div class="bg-glow bg-g2"></div>
     </div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">PORTFOLIO</div>
+      <div class="hero-name" id="hero-name"></div>
+      <div class="hero-jp" id="hero-jp"></div>
+      <div class="hero-role" id="hero-role"></div>
+    </div>
+    <div class="hero-scroll"><div class="scroll-label">scroll</div><div class="scroll-line"></div></div>
+  </section>
+  <section id="s-desk"><div id="wins"></div><div id="social"></div><div id="dock"></div></section>
+  <section id="s-art">
+    <div class="art-header">
+      <div class="art-eyebrow">Art &amp; Showreels</div>
+      <div class="art-title" id="art-title"></div>
+      <p class="art-sub">Selected works, 3D assets &amp; digital illustrations</p>
+    </div>
+    <div class="art-grid" id="art-grid"></div>
+    <div class="art-footer"><div class="art-footer-copy" id="art-copy"></div><div class="art-footer-links" id="art-links"></div></div>
+  </section>
+</div>
+<div id="po">
+  <div class="po-bar">
+    <button class="po-back" onclick="closeProj()">← Back</button>
+    <div style="display:flex;gap:1rem"><button class="po-nb" id="po-prev" onclick="navProj(-1)">← Prev</button><button class="po-nb" id="po-next" onclick="navProj(1)">Next →</button></div>
+  </div>
+  <div class="po-content" id="po-content"></div>
+</div>
+<div id="lb" onclick="if(event.target.id==='lb')closeLb()">
+  <button id="lb-close" onclick="closeLb()">✕</button>
+  <div id="lb-inner"></div>
+  <div id="lb-cap"></div>
+</div>
+<div id="egg" onclick="closeEgg()">
+  <div class="ee-icon" id="ee-icon"></div><div class="ee-title" id="ee-title"></div><div class="ee-sub" id="ee-sub"></div>
+  <div class="ee-hint">click anywhere to dismiss</div>
+</div>
+<audio id="bg-music" loop style="display:none"></audio>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const CONFIG = {
+  "name": "Vincent Lin",
+  "nameJP": "林先勇",
+  "role": "Game Programmer / Technical Artist",
+  "company": "Nimbus Games",
+  "location": {
+    "city": "Kota Kinabalu, Malaysia",
+    "lat": 3.073,
+    "lng": 101.518
+  },
+  "bio": "An enthusiastic game programmer bridging artistic vision with technical implementation across Unreal Engine and Unity. Currently building immersive experiences at Nimbus Games.",
+  "avatarUrl": "",
+  "resumeUrl": "#",
+  "heroMediaUrl": "",
+  "bgMusicUrl": "",
+  "social": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/lyung96"
+    },
+    {
+      "label": "LinkedIn",
+      "href": "https://www.linkedin.com/in/lin-hsien-yung-3284731b0/"
+    },
+    {
+      "label": "Twitter",
+      "href": "https://twitter.com/Vincentlhy96"
+    },
+    {
+      "label": "Itch.io",
+      "href": "https://lyung96.itch.io/"
+    },
+    {
+      "label": "Email",
+      "href": "mailto:vincentlin9364@gmail.com"
+    }
+  ],
+  "code": [
+    "|cm:// Vincent Lin — Game Programmer / Technical Artist|",
+    "|kw:import| |fn:{ GameDev }| |dk:from| |st:\"nimbus-games\"|",
+    "",
+    "|kw:const| developer = |kw:new| |fn:GameDev|({",
+    "  name:     |st:\"Vincent Lin\"|,",
+    "  role:     |st:\"Game Programmer\"|,",
+    "  location: |st:\"Malaysia 🇲🇾\"|,",
+    "  engines:  [|st:\"Unreal Engine 5\"|, |st:\"Unity\"|],",
+    "  focus:    [|st:\"Gameplay\"|, |st:\"AI\"|, |st:\"VFX\"|, |st:\"Tech Art\"|],",
+    "  available:|kw:true|,",
+    "})",
+    "",
+    "|cm:// Currently shipping Chiyo @ Nimbus Games|",
+    "|kw:export default| developer"
+  ],
+  "skills": [
+    {
+      "cat": "Engine",
+      "items": [
+        "Unreal Engine 5",
+        "Unreal Engine 4",
+        "Unity",
+        "Stencyl"
+      ]
+    },
+    {
+      "cat": "Language",
+      "items": [
+        "Blueprint",
+        "C++",
+        "C#",
+        "GDScript"
+      ]
+    },
+    {
+      "cat": "Specialty",
+      "items": [
+        "Gameplay",
+        "AI / NPC",
+        "Puzzle Design",
+        "VFX / Niagara",
+        "Tech Art",
+        "Optimization",
+        "Animation"
+      ]
+    },
+    {
+      "cat": "Tools",
+      "items": [
+        "Git",
+        "Perforce",
+        "Blender",
+        "Jira",
+        "Figma"
+      ]
+    }
+  ],
+  "loadMsgs": [
+    "Loading environment...",
+    "Importing Unreal Engine modules...",
+    "Compiling blueprint assets...",
+    "Rendering portfolio data...",
+    "Calibrating interaction systems...",
+    "All systems ready."
+  ],
+  "experience": [
+    {
+      "type": "work",
+      "year": "2023 – Present",
+      "org": "Nimbus Games",
+      "role": "Game Programmer",
+      "desc": "Shipping Chiyo on Steam. Responsible for puzzle systems, AI behaviours, sequencers, widgets and gameplay mechanics.",
+      "tags": [
+        "UE5",
+        "Blueprints",
+        "C++"
+      ]
+    },
+    {
+      "type": "edu",
+      "year": "2019 – 2022",
+      "org": "University of Wollongong Malaysia",
+      "role": "BSc Computer Science (Game Development)",
+      "desc": "Specialisation in game development. Lead Programmer on Other Life (UE4) as final-year capstone project.",
+      "tags": [
+        "UE4",
+        "Unity",
+        "C#"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "year": "2022",
+      "title": "Best Programmer",
+      "org": "UOW Malaysia Game Jam"
+    }
+  ],
+  "exhibitions": [
+    {
+      "year": "2022",
+      "title": "Other Life — Student Showcase",
+      "venue": "UOW Malaysia"
+    }
+  ],
+  "art": [
+    {
+      "id": "art_portrait",
+      "title": "Portrait Illustration",
+      "src": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1788878145/color_female_jwzx6w.jpg",
+      "medium": "Digital Art",
+      "year": "2022"
+    },
+    {
+      "id": "art_mclaren",
+      "title": "McLaren 3D Model",
+      "src": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092968/Mclaren_ojlnru.png",
+      "medium": "3D / Blender",
+      "year": "2022"
+    },
+    {
+      "id": "art_coffeemachine",
+      "title": "Coffee Machine 3D Model",
+      "src": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092418/coffeemachine3_mz1igp.png",
+      "medium": "3D / Blender",
+      "year": "2022"
+    },
+    {
+      "id": "art_env",
+      "title": "3D Environment",
+      "src": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092339/Enviroment_h0pzob.png",
+      "medium": "3D / Blender",
+      "year": "2022"
+    },
+    {
+      "id": "art_house",
+      "title": "3D House Model",
+      "src": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092189/House_axu1uk.png",
+      "medium": "3D / Blender",
+      "year": "2022"
+    },
+    {
+      "id": "art_showreel_3d",
+      "title": "3D Generalist Showreel",
+      "src": "",
+      "medium": "3D Animation / Showreel",
+      "year": "2022",
+      "youtubeId": "u7Z7J9ezk3s"
+    },
+    {
+      "id": "art_leapoffaith",
+      "title": "Leap of Faith — FYP",
+      "src": "",
+      "medium": "3D Animation / FYP",
+      "year": "2022",
+      "youtubeId": "em2Yhjjp3aU"
+    }
+  ],
+  "passcodes": [
+    {
+      "code": "GAMEOVER",
+      "emoji": "💀",
+      "title": "G A M E  O V E R",
+      "subtitle": "Achievement Unlocked: Secret Hunter"
+    },
+    {
+      "code": "CHIYO",
+      "emoji": "⛩️",
+      "title": "C H I Y O",
+      "subtitle": "Opening abandoned mansion… horror incoming."
+    },
+    {
+      "code": "NIMBUS",
+      "emoji": "⚡",
+      "title": "N I M B U S  G A M E S",
+      "subtitle": "Shipping Chiyo to Steam…"
+    },
+    {
+      "code": "UNITY",
+      "emoji": "🎮",
+      "title": "UNITY DETECTED",
+      "subtitle": "Switching engine… just kidding. UE5 stays."
+    }
+  ],
+  "projects": [
+    {
+      "id": "chiyo",
+      "icon": "⛩️",
+      "title": "Chiyo",
+      "engine": "Unreal Engine 5.3.2",
+      "platform": "PC Windows",
+      "year": "2023",
+      "status": "done",
+      "thumb": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092503/ss_d3b2bbc2f34c847f0c852987233933327e4fa654.1920x1080_xxfnfj.jpg",
+      "desc": "First-person hardcore escape room horror set in Japan’s Edo era. Shipping at Nimbus Games.",
+      "links": {
+        "Steam": "https://store.steampowered.com/app/2220660/Chiyo/"
+      },
+      "sections": [
+        {
+          "id": "chiyo_banner",
+          "type": "image",
+          "src": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092503/ss_d3b2bbc2f34c847f0c852987233933327e4fa654.1920x1080_xxfnfj.jpg",
+          "caption": "Chiyo — Unreal Engine 5.3.2"
+        },
+        {
+          "id": "chiyo_h_sum",
+          "type": "heading",
+          "eyebrow": "01 · AT A GLANCE",
+          "text": "Summary & Key Contributions"
+        },
+        {
+          "id": "chiyo_intro",
+          "type": "text",
+          "content": "**Chiyo** is a first-person hardcore escape room horror game set in Japan’s Edo era (released on **Steam** by Nimbus Games). As **Idate Chiyo**, a paranormal investigator possessing supernatural abilities, players explore an abandoned mansion to unveil a family’s dark secret. Below is everything I built as **Game Programmer**:"
+        },
+        {
+          "id": "chiyo_summary_list",
+          "type": "list",
+          "items": [
+            "**Main Puzzles**: `Familial Emblem` (4-dial crest lock), `Creeping Malice` (gong assembly & ghost evade), `Dancing Shadows` (weeping-angel Puppet AI & candle poses), and `Corrupted Effigies` (3-headed statue & rotating cleansing beam).",
+            "**Assisted Puzzles**: Contributed to `Matrimony Tokens` (4 altar clue items), `Scared Zodiacs` (8-dial hint rotation), and `Visage of the Patron` (8-statue placement).",
+            "**AI & Sequencers**: Owned **Asuke AI** (escort tutorial NPC) and **Puppet AI** (weeping angel), plus designer-facing Blueprint triggers for **Sequencers** driven by sightlines and puzzle conditions.",
+            "**Gameplay & Widgets**: Built **Player Movement & Interaction**, **ScrySight** (LoS & range highlighting), **Subtitles**, and **PlayerHUD** crosshair widgets."
+          ]
+        },
+        {
+          "id": "chiyo_h3",
+          "type": "heading",
+          "eyebrow": "02 · ARCHITECTURE, PROFILING & DEBUGGING",
+          "text": "Challenges & Solutions"
+        },
+        {
+          "id": "chiyo_list_chal",
+          "type": "list",
+          "items": [
+            "**Performance Bottlenecks (`Unreal Insights`)**: Several spikes only surfaced in full-level integration or packaged builds. Used Unreal’s built-in profiling & `Unreal Insights` to pinpoint CPU/GPU hotspots, replacing unnecessary `Event Tick` checks with delegates and timers.",
+            "**Debugging Across Codebase**: Coordinating multi-actor puzzle logic across multiple programmers required tracing interdependent Blueprints together, hardening edge-case error handling, and decoupling interactions with `Event Dispatchers`.",
+            "**Code Maintainability & Readability**: Refactored convoluted logic, enforced consistent naming/commenting and documented cross-actor dependencies, and wrote descriptive version-control commits for team clarity."
+          ]
+        },
+        {
+          "id": "chiyo_yt",
+          "type": "youtube",
+          "videoId": "REPLACE_WITH_CHIYO_TRAILER_ID",
+          "caption": "Official Launch Trailer"
+        },
+        {
+          "id": "chiyo_gallery",
+          "type": "gallery",
+          "cols": 3,
+          "images": [
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092499/ss_c596128d98046d74de803a271ed942e9a4a40d56.1920x1080_yj0msq.jpg",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092495/ss_57241021db9a159244a1ed4007845cd13669d1f0.1920x1080_cigkp9.jpg",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092491/ss_b609e658afceff7f9c448094d8060c7fdfd74a23.1920x1080_yz8hzf.jpg",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092487/ss_6933ba3b79cf3c01ff54be0311fb9fd0737642f0.1920x1080_tx9cii.jpg",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092484/ss_30aa1c9deda4a3b31a5b5b7d570ca6379b6dac20.1920x1080_hlbs1h.jpg"
+          ],
+          "caption": "Chiyo — Official In-Game Screenshots"
+        },
+        {
+          "id": "chiyo_h1",
+          "type": "heading",
+          "eyebrow": "03 · PUZZLE & AI ENGINEERING",
+          "text": "Mechanics Showcase"
+        },
+        {
+          "id": "chiyo_sh_fe",
+          "type": "subheading",
+          "text": "1. Familial Emblem"
+        },
+        {
+          "id": "chiyo_split_fe",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "4-Dial Crest Combination Chest",
+          "content": "Acts as the player’s opening challenge—teaching exploration for notes and item clues. Interacting with the sealed chest smoothly **zooms the camera onto the puzzle** and switches player input to cursor interaction so players rotate the **4 emblem dials** until the Hon’iden crest aligns and springs open.",
+          "media": "https://static.wixstatic.com/media/97222b_ed9183b59b0d45dea4af294fb57c57ca~mv2.gif",
+          "mediaCaption": "Familial Emblem — 4-dial crest rotation mechanic"
+        },
+        {
+          "id": "chiyo_sh_cm",
+          "type": "subheading",
+          "text": "2. Creeping Malice"
+        },
+        {
+          "id": "chiyo_split_cm",
+          "type": "split",
+          "layout": "media-left",
+          "subtitle": "Gong Assembly Under Threat",
+          "content": "Introduces the first active roaming ghost inside a locked wing while players search for scattered **gong components** and strike it with the mallet. Placing either the gong’s plate or rope automatically checks the player’s inventory and installs other collected parts in one pass so players never repeat tedious placement actions under pressure.",
+          "media": "https://static.wixstatic.com/media/97222b_17feb42c74274ca5ad3b050364eb08b0~mv2.gif",
+          "mediaCaption": "Creeping Malice — collecting gong parts while evading the ghost"
+        },
+        {
+          "id": "chiyo_sh_ds",
+          "type": "subheading",
+          "text": "3. Dancing Shadows & Puppet Enemy AI"
+        },
+        {
+          "id": "chiyo_split_ds",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "Real vs. Decoy Puppets & Candle Pose Puzzle",
+          "content": "**The Puppet**: Halts whenever observed; after a brief pause while watched, its **head slowly turns toward the player** to raise tension and reveal which puppet is real among **multiple room decoys**. Unobserved, it opens doors, teleports behind valid open space, and escalates through **3-tier footstep audio (`walk` → `run` → `sprint`)** alongside shifting facial textures before triggering a jumpscare.\n**The Candle Stand**: Players match lighting whichever candle’s miniature statue mirrors the **real puppet’s pose**—each correct candle advances the puppet’s pose; a mistake extinguishes all candles, resets poses, and risks an immediate jumpscare.",
+          "media": "https://static.wixstatic.com/media/97222b_667845a5047b4c36bbc6e5a9d26a5750~mv2.gif",
+          "mediaCaption": "Dancing Shadows — weeping-angel Puppet AI & candle-pose survival puzzle"
+        },
+        {
+          "id": "chiyo_ai_callout",
+          "type": "callout",
+          "tone": "gold",
+          "label": "AI BEHAVIOR DESIGN",
+          "title": "Sightline Freeze, Decoy Identification & Dynamic Escalation",
+          "content": "Evaluates **player camera frustum** and `LineTraceByChannel` checks in real time. Rather than cluttering the HUD with warning bars, the puppet communicates timer urgency solely through **step cadence shifts (`walk`/`run`/`sprint`)**, subtle **face texture deterioration**, and its telltale **watched head-turn** among decoy mannequins."
+        },
+        {
+          "id": "chiyo_sh_ce",
+          "type": "subheading",
+          "text": "4. Corrupted Effigies & Cleansing Beam"
+        },
+        {
+          "id": "chiyo_split_ce",
+          "type": "split",
+          "layout": "media-left",
+          "subtitle": "3 Wise Monkeys Paintings, Geisha AI & Rotating Statue Beam",
+          "content": "Cleansing cursed **\"see no evil, hear no evil, speak no evil\"** paintings drops missing statue segments while teleporting the **Geisha AI** into the chamber to pursue the player. Once reassembled on the **3-headed statue**, the statue emits a rotatable **cleansing beam**—players must slide open intervening doors for clear line of sight to purify the evil statues.",
+          "media": "https://static.wixstatic.com/media/97222b_3af8ac7484004a1ca9d4a9e48d99574c~mv2.gif",
+          "mediaCaption": "Corrupted Effigies — 3-headed statue assembly & rotating cleansing beam"
+        },
+        {
+          "id": "chiyo_beam_callout",
+          "type": "callout",
+          "tone": "blue",
+          "label": "SYSTEM EVOLUTION · FROM OTHER LIFE",
+          "title": "Compact Cleansing Beam Adapted from Other Life",
+          "content": "Heavily referenced my earlier Light Relay codebase from **Other Life**, stripping and tightening it into a **compact beam emitter** that dynamically extends or contracts its beam length and interacts with custom trace-blocking channels (like the sliding chamber doors) before purifying corrupted targets."
+        },
+        {
+          "id": "chiyo_ref_otherlife",
+          "type": "projectRef",
+          "projectId": "otherlife",
+          "note": "Referenced System — Explore the original Light Emitter, Sensor & Transmitter relay mechanics I built in Other Life (UE4)."
+        },
+        {
+          "id": "chiyo_h_ai",
+          "type": "heading",
+          "eyebrow": "04 · COMPANION NAVIGATION",
+          "text": "Companion AI — Asuke Escort System"
+        },
+        {
+          "id": "chiyo_split_asuke",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "Guided Onboarding & Escort Range Logic",
+          "content": "**Asuke AI** guides the player through both core mechanics tutorials and story beats. Built like an RPG escort mission: the NPC continuously validates **player proximity** and automatically halts to wait whenever the player falls out of range or inspects clues before resuming its route.",
+          "media": "https://static.wixstatic.com/media/97222b_166f6136dd144b49ac88e6ad0a90ca45~mv2.gif",
+          "mediaCaption": "Asuke AI — escort NPC that pauses when the player falls behind"
+        }
+      ]
+    },
+    {
+      "id": "otherlife",
+      "icon": "🌌",
+      "title": "Other Life",
+      "engine": "Unreal Engine 4.27.2",
+      "platform": "PC Windows",
+      "year": "2022",
+      "status": "done",
+      "thumb": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092090/OtherLife_gbjgqn.png",
+      "desc": "First-person alien exploration puzzle game built around light-relay mechanics. Lead Programmer, team of 8.",
+      "links": {
+        "Download": "https://uowmgames.itch.io/other-life"
+      },
+      "sections": [
+        {
+          "id": "ol_banner",
+          "type": "image",
+          "src": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092090/OtherLife_gbjgqn.png",
+          "caption": "Other Life — Unreal Engine 4.27.2 · PC Windows · May – Dec 2022 · Lead Programmer (Team of 8)"
+        },
+        {
+          "id": "ol_h_sum",
+          "type": "heading",
+          "eyebrow": "01 · AT A GLANCE",
+          "text": "Summary & Lead Programmer Role"
+        },
+        {
+          "id": "ol_intro",
+          "type": "text",
+          "content": "**Other Life** is a first-person exploration game where you play as an alien explorer, sent out to scour the stars in search of new life. After detecting a significant energy signature on a nearby planet, you and your trusty AI companion happen upon the remnants of an alien civilization, brought to ruin by an unknown catastrophe. Armed with unique **light-based technology**, explore and discover the truth behind this interstellar mystery (**Team of 8 · May – Dec 2022**)."
+        },
+        {
+          "id": "ol_summary_list",
+          "type": "list",
+          "items": [
+            "**Lead Programmer Scope**: Oversaw technical feasibility across an **8-member team**, bridging my Unity experience into Unreal Engine Blueprints and architecting how game objects transmit and receive light data.",
+            "**Core Systems**: Light Relay (`Emitter`, `Sensor`, `Transmitter`), Hand Tools (`Light Mode` emit / `Dark Mode` absorb / `Rotation Mode`), **Hand Animation State Machine**, and **Lock-On System**.",
+            "**UI & Narrative**: **Drone Inventory System**, **Journals & Monumental Stone Popup UI**, Objective System, Menus Setup, and Cutscenes.",
+            "**Technical Art & VFX**: **Volumetric Sandstorm**, **Energy Core**, **Debris Falling Effect (Niagara)**, **Negative Light cone (`IES` vs 3D cone)**, and Object Masking for UV functions."
+          ]
+        },
+        {
+          "id": "ol_h_chal",
+          "type": "heading",
+          "eyebrow": "02 · PRODUCTION & ENGINEERING LESSONS",
+          "text": "Challenges & Solutions"
+        },
+        {
+          "id": "ol_chal_list",
+          "type": "list",
+          "items": [
+            "**New to Unreal Engine**: Every programmer on the team was new to Unreal Engine coming from Unity. We used the weeks before production officially started to learn Blueprints and UE workflows—early progress felt slow enough that switching back to Unity was considered, but pushing through made Unreal Engine my preferred engine.",
+            "**Performance Issues**: Playtesting surfaced major FPS drops inside one level caused by lighting overhead and `Event Tick` running checks continuously on functions that only needed one-off triggers. Using industry technical feedback, we profiled CPU vs. GPU cost, reorganized project files, refactored tick-heavy Blueprints, and balanced level lighting.",
+            "**Gameplay Scope Evaluation (Gesture Drawing)**: One early concept required **Arx Fatalis-style gesture drawing** to interact with objects. Initial Unreal C++ references were beyond our comfort level, so we prototyped with a plugin—then cut the feature after finding symbol drawing felt clunky and broke the pacing we wanted."
+          ]
+        },
+        {
+          "id": "ol_gallery_screens",
+          "type": "gallery",
+          "cols": 2,
+          "images": [
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092458/_HnUGe_wfceeh.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092436/7y3oCR_eqa1xp.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092433/4jwSiJ_kmr0kv.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092422/ceZJVR_csegnp.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092319/gEJs_2_jqfrkw.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092180/ldXsSy_o8zel7.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092086/oYuPuq_qfzln2.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091831/XyiwbX_lodjtr.png"
+          ],
+          "caption": "Other Life — Gameplay Environments & Blueprint Architecture Captures (click any frame to enlarge)"
+        },
+        {
+          "id": "ol_h_sys",
+          "type": "heading",
+          "eyebrow": "03 · GAMEPLAY & UI SYSTEMS",
+          "text": "Core Mechanics Breakdown"
+        },
+        {
+          "id": "ol_sh_hand",
+          "type": "subheading",
+          "text": "1. Hand Tools & Animation State Machine"
+        },
+        {
+          "id": "ol_split_hand_gif",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "Light, Dark & Rotation Modes",
+          "content": "The player’s hand tools feature 3 distinct modes: **Light Mode** shoots out a beam to input light onto sensors, **Dark Mode** projects a dark cone that absorbs light from light assets, and **Rotation Mode** allows the player to rotate world puzzle objects by a fixed angle.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1788878189/HandAnimation_to5nf1.gif",
+          "mediaCaption": "Hand Animation — switching seamlessly between Light, Dark & Rotation modes"
+        },
+        {
+          "id": "ol_split_hand_bp",
+          "type": "split",
+          "layout": "media-left",
+          "subtitle": "Enum-Driven Hand Animation Blueprint",
+          "content": "The hand starts lowered, raises into an **idle animation** on activation, and blends cleanly into active tool animations. Switching tools triggers a **mode-switch transition** before entering the new stance, governed by an `Enum` updated directly by the player actor’s tool-switching function.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092198/HandAnimation_sqezuq.png",
+          "mediaCaption": "Hand Animation State Machine governing tool blend states"
+        },
+        {
+          "id": "ol_sh_light",
+          "type": "subheading",
+          "text": "2. Light Relay System — Emitters, Sensors & Transmitters"
+        },
+        {
+          "id": "ol_split_light_1",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "Three Modular Relay Actors",
+          "content": "Built around 3 core actor types: the **Emitter (`Sphere Core`)** shoots out constant light and transmits data forward; the **Sensor (`Cube Core`)** receives light data to trigger affected objects; and the **Transmitter** combines both roles—receiving incoming light, transforming it into a new beam, and relaying it onward.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1788878193/LightMechanics_o9milj.gif",
+          "mediaCaption": "Door Unlock — Player shoots light into an Emitter → relays to Sensor to open doors"
+        },
+        {
+          "id": "ol_pair_light_23",
+          "type": "split",
+          "layout": "media-pair",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1788878196/LightMechanics2_b1uenx.gif",
+          "mediaCaption": "Wall Destruction — Combining multiple Sensors over a Light Interface",
+          "media2": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1788878194/LightMechanics3_gsmxmj.gif",
+          "media2Caption": "Emitter, Sensor & Transmitter — core light relay interaction"
+        },
+        {
+          "id": "ol_ref_chiyo",
+          "type": "projectRef",
+          "projectId": "chiyo",
+          "note": "Evolved System — See how this Light Relay raycast pattern was later adapted for the Corrupted Effigies cleansing beam in Chiyo (UE5)."
+        },
+        {
+          "id": "ol_sh_lock",
+          "type": "subheading",
+          "text": "3. Lock-On Targeting & Smooth Camera Panning"
+        },
+        {
+          "id": "ol_split_lock",
+          "type": "split",
+          "layout": "media-left",
+          "subtitle": "Collision Array & Lerp Camera Control",
+          "content": "A collision trigger tracks valid lockable actors inside an array. Engaging lock-on targets the available actor; pressing the input again **swaps cleanly to another nearby actor** or disengages if none are available. It also **auto-disengages** when the target leaves trigger range.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1788878191/LockOn_s0ue8f.gif",
+          "mediaCaption": "Lock-On Camera — smooth zooming, panning & range-based auto-disengage"
+        },
+        {
+          "id": "ol_gallery_lock",
+          "type": "gallery",
+          "cols": 2,
+          "images": [
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092121/Lockon_xiiyhv.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092125/lockon1_zd8mvx.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092353/engagelock1_adz0a7.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091913/SwapLock_tiq710.png"
+          ],
+          "captions": [
+            "Main Lock-On Function & Camera Lerp",
+            "Collision Trigger Actor Array Tracking",
+            "Engage Lock-On & Auto-Disengage Logic",
+            "SwapLock — Cycling Available Target Actors"
+          ],
+          "caption": "Lock-On Blueprint Logic — Collision Detection, Engage & Swap-Target Switching"
+        },
+        {
+          "id": "ol_callout_lockon",
+          "type": "callout",
+          "tone": "blue",
+          "label": "TROUBLESHOOTING & CUSTOMIZATION",
+          "title": "Eliminating Abrupt Camera Snaps & Adding Smooth Zoom Framing",
+          "content": "Based on a YouTube **Target Lock On** reference and customized heavily for first-person puzzle aiming: added **Lerp smoothing** on camera targeting to prevent jarring view snaps when locking on, plus smooth camera **zoom-in / zoom-out transitions** and automatic out-of-range disengage."
+        },
+        {
+          "id": "ol_ext_lockon",
+          "type": "extRef",
+          "source": "YouTube Tutorial Reference",
+          "title": "Target Lock-On System Tutorial (Customized with Smooth Pan & Zoom)",
+          "url": "https://www.youtube.com/watch?v=luITTVwa26M&t=329s",
+          "note": "Base Lock-On tutorial referenced before modifying it with camera Lerp smoothing, zoom framing, and range-exit auto-disengage."
+        },
+        {
+          "id": "ol_sh_inv",
+          "type": "subheading",
+          "text": "4. AI Drone Inventory & Journal / Popup System"
+        },
+        {
+          "id": "ol_split_inv",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "3-Widget Architecture & Single-Stack Pivot",
+          "content": "Built around 3 widgets (`Inventory` parent, `Inventory Slot`, `Item HUD`) plus pickable actors with an `Item Info` struct and `Interact Interface`. Through gameplay iteration, we streamlined active inventory to hold **1 stackable item type inspected directly on the AI companion drone**, while keeping multi-slot support ready underneath.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1788878198/Inventory_uydtnw.gif",
+          "mediaCaption": "Drone Inventory — AI companion storing and presenting collected items in-world"
+        },
+        {
+          "id": "ol_ext_inv",
+          "type": "extRef",
+          "source": "YouTube Tutorial Reference · Beardgames",
+          "title": "Beardgames — Unreal Engine Inventory System Tutorial",
+          "url": "https://www.youtube.com/watch?v=TcTxSyk8Vks",
+          "note": "Referenced for the 3-widget Slot / Item Info / Interact Interface foundation, then modified to suit the AI Drone companion."
+        },
+        {
+          "id": "ol_pair_journal",
+          "type": "split",
+          "layout": "media-pair",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1788878195/Journal_geug8e.gif",
+          "mediaCaption": "Popup UI — Synchronized lore unlock pages & auto-hiding navigation arrows",
+          "media2": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1788878191/Journal2_rwxnlp.gif",
+          "media2Caption": "Journal System — Absorbing light from Luminite monumental stones to unlock lore"
+        },
+        {
+          "id": "ol_split_journal_bp",
+          "type": "split",
+          "layout": "media-left",
+          "subtitle": "Game Instance Persistence & Reusable Stone Triggers",
+          "content": "The **Journal** stores unlocked pages inside a persistent `Game Instance` boolean array. Exposed `Start Index` and `Max Index` integers let both Journal and Popup widgets share page navigation—auto-hiding invalid arrows, showing the exit button only on the final page, and letting Luminite stones swap widgets cleanly in editor.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092177/journal2_tdd80j.png",
+          "mediaCaption": "Journal & Popup UI Widget Blueprint setup"
+        },
+        {
+          "id": "ol_h_vfx",
+          "type": "heading",
+          "eyebrow": "04 · TECHNICAL ART, SHADERS & VFX",
+          "text": "VFX Assets, Shaders & Troubleshooting"
+        },
+        {
+          "id": "ol_sh_core",
+          "type": "subheading",
+          "text": "5. Energy Core — Fresnel & Hue-Shift Shader"
+        },
+        {
+          "id": "ol_desc_core",
+          "type": "text",
+          "content": "Built as the energy source powering the Luminites’ alien ruins. Referenced from **UnrealCG’s Aura Body Effect** tutorial—originally designed for sci-fi armor—and adapted by tuning **Fresnel falloff**, adding **random mesh scale jitter** for an unstable look, and binding a **trigger-driven Hue range shift**."
+        },
+        {
+          "id": "ol_pair_core",
+          "type": "split",
+          "layout": "media-pair",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092667/Core_tk4ple.gif",
+          "mediaCaption": "Energy Core VFX — Adapted Fresnel aura + unstable scale pulse",
+          "media2": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1788878160/Core2_vjidkm.gif",
+          "media2Caption": "Energy Core (Triggered State) — Dynamic Hue shifting reaction"
+        },
+        {
+          "id": "ol_ext_core",
+          "type": "extRef",
+          "source": "YouTube Tutorial Reference · UnrealCG",
+          "title": "UnrealCG — Aura Body Effect Shader (Adapted for Alien Energy Core)",
+          "url": "https://www.youtube.com/watch?v=Gbqp9PZaD7A",
+          "note": "Adapted the armor aura shader’s Fresnel falloff alongside random scaling and trigger-based Hue switching."
+        },
+        {
+          "id": "ol_sh_envfx",
+          "type": "subheading",
+          "text": "6. Volumetric Sandstorm, Falling Debris (Niagara) & IES Tests"
+        },
+        {
+          "id": "ol_split_fog",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "From Flat 2D Plane to True 3D Volumetric Fog",
+          "content": "Earlier sandstorm attempts placed a **2D panning noise plane** directly in front of the player camera, which felt flat and void of spatial depth when moving. Switching to **Michael. G Art’s Animated Local Volumetric Fog** method uses a cube mesh with an additive material tied to `Exponential Height Fog`, driven by masked `Perlin Noise` and panners.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092630/Fog_u9zxww.gif",
+          "mediaCaption": "Volumetric Sandstorm — Real-time 3D local fog volume in desert ruins"
+        },
+        {
+          "id": "ol_pair_fog_ies",
+          "type": "split",
+          "layout": "media-pair",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092334/Fog_mafx2i.png",
+          "mediaCaption": "Volumetric Fog Material Graph — Exponential Height Fog + Perlin Noise panners",
+          "media2": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092174/IES_light_uotzax.png",
+          "media2Caption": "IES Lighting Test — Early negative IES intensity experiment for black-light"
+        },
+        {
+          "id": "ol_ext_fog",
+          "type": "extRef",
+          "source": "YouTube Tutorial Reference · Michael. G Art",
+          "title": "Michael. G Art — Animated Local Volumetric Fog Tutorial",
+          "url": "https://www.youtube.com/watch?v=2L362NY3psY",
+          "note": "Replaced the flat camera-locked 2D noise plane with true 3D Perlin-masked local volumetric fog."
+        },
+        {
+          "id": "ol_split_rock",
+          "type": "split",
+          "layout": "media-left",
+          "subtitle": "Debris Falling Effect using Niagara System",
+          "content": "After standard debris tutorials fell short of the atmosphere needed, I repurposed a **falling leaves Niagara tutorial by CGHOW**—swapping foliage cards for **rock meshes**, tuning velocity and mass values, and enabling **world collision** so falling pebbles react naturally against ruin surfaces.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092551/RockFX_msjeqh.gif",
+          "mediaCaption": "Niagara Falling Debris — Rock meshes with velocity, mass & scene collision"
+        },
+        {
+          "id": "ol_ext_rock",
+          "type": "extRef",
+          "source": "YouTube Tutorial Reference · CGHOW",
+          "title": "CGHOW — Falling Leaves Niagara Tutorial (Adapted for Falling Rock Debris)",
+          "url": "https://www.youtube.com/watch?v=YQe47qjmClE",
+          "note": "Adapted leaf particle behavior into heavy rock debris with custom meshes, velocity/mass tuning, and collision."
+        },
+        {
+          "id": "ol_sh_neglight",
+          "type": "subheading",
+          "text": "7. Negative Light Effects — Black-Light Cone Shader vs. IES"
+        },
+        {
+          "id": "ol_split_neg",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "Distance-Scaling 3D Black-Light Cone",
+          "content": "Tasked with building a **\"black light\"** effect opposite to a normal flashlight—a real challenge because true darkness cannot be emitted by simply setting a light color to black. The final shipped solution uses a **3D cone mesh that scales dynamically to player look-at raycast distance**, driven by a custom dark-cone material.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092573/Negative_Light_v3wr2i.gif",
+          "mediaCaption": "Negative Light — Distance-scaled 3D cone mesh simulating an inverse flashlight"
+        },
+        {
+          "id": "ol_callout_neglight",
+          "type": "callout",
+          "tone": "blue",
+          "label": "TROUBLESHOOTING & TRADE-OFF",
+          "title": "Why I Rejected Forced Negative IES Intensity for the 3D Cone Mesh",
+          "content": "Before settling on the 3D cone mesh, I discovered another workaround (`IES_light` capture above): overriding UE4’s **IES lighting intensity scale to a negative value** manually—even though Unreal Engine normally prevents negative intensities. While it realistically absorbed ambient light from surfaces, it proved **unstable, performance-intensive**, and lacked the **3D volumetric beam look** required—making the distance-scaling 3D cone material the cleaner shipping solution."
+        }
+      ]
+    },
+    {
+      "id": "contriver",
+      "icon": "🔫",
+      "title": "Contriver",
+      "engine": "Unity 2021.2.8f1",
+      "platform": "Mobile / PC Windows",
+      "year": "2022",
+      "status": "done",
+      "thumb": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092373/Contriver_CoverImage_u5hxjf.png",
+      "desc": "Sci-Fi mobile gun-assembly game: Lead Programmer (Team of 8) handling touch drag, parenting offset snap math, QTE charging & optimization.",
+      "links": {
+        "Download": "https://nullkreatorzgps.itch.io/contriver"
+      },
+      "sections": [
+        {
+          "id": "con_banner",
+          "type": "image",
+          "src": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092370/Contriver_banner_ImageFormat_wajtqz.png",
+          "caption": "Contriver — Unity 2021.2.8f1 · 93 Days (Sep – Dec 2022) · Lead Programmer (Team of 8)"
+        },
+        {
+          "id": "con_h_sum",
+          "type": "heading",
+          "eyebrow": "01 · AT A GLANCE",
+          "text": "Summary & Lead Programmer Contributions"
+        },
+        {
+          "id": "con_intro",
+          "type": "text",
+          "content": "**Contriver** is an action Sci-Fi gun-building game where the player controls a futuristic bounty hunter entering the annual **Point-Blank** blood sport event. As **Lead Programmer** on my **first 8-person team** (`93 days · 9 Sep – 11 Dec`), I architected the core mobile assembly, charging, UI, cutscene, and lighting pipelines:"
+        },
+        {
+          "id": "con_list",
+          "type": "list",
+          "items": [
+            "**Gun Assembly & Snapping**: Mobile touch raycast dragging, deadzone detach timers, and dynamic parent-offset attachment math (`SnappingManager` / `CoreChildTrigger`).",
+            "**Mobile Gyro & QTE Systems**: Accelerometer **Shake-to-Reset** error recovery, QTE **Parts Charging**, **Gun Compartment** swapping, and **Vertical Height Adjustment**.",
+            "**UI, Cutscenes & Visuals**: Opening door cutscene animator, Unity Outline part highlights, baked HDRI/neon street lighting, Post-Processing, and older-device mobile optimization."
+          ]
+        },
+        {
+          "id": "con_h_chal",
+          "type": "heading",
+          "eyebrow": "02 · ARCHITECTURE & MOBILE OPTIMIZATION",
+          "text": "Challenges & Solutions"
+        },
+        {
+          "id": "con_chal_list",
+          "type": "list",
+          "items": [
+            "**Core Mechanics of Gun Assembly**: With scarce references for free-form 3D gun assembly, we worked closely with mentors to build a reliable **parenting + child-trigger offset calculation** system so parts snap accurately from any approach angle.",
+            "**Optimization for Mobile Devices**: Playtesting on older phones revealed frame drops as stages scaled up. Solved by **downsampling texture sizes** across game assets, aggressively **baking static lighting** into environment emission maps, and simplifying gameplay post-processing."
+          ]
+        },
+        {
+          "id": "con_yt",
+          "type": "youtube",
+          "videoId": "UT2ye1C_GrE",
+          "caption": "Contriver — Gameplay Video"
+        },
+        {
+          "id": "con_screens",
+          "type": "gallery",
+          "cols": 3,
+          "images": [
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092377/Contriver_Screen001_evdruf.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092381/Contriver_Screen002_x9v6yp.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092386/Contriver_Screen003_ecgso6.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092389/Contriver_Screen004_xrxxqt.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092392/Contriver_Screen005_gbmiws.png"
+          ],
+          "caption": "Contriver — In-Game Screenshots"
+        },
+        {
+          "id": "con_h_mech",
+          "type": "heading",
+          "eyebrow": "03 · MECHANICS & CODE BREAKDOWN",
+          "text": "Gun Assembly, UI & Controls"
+        },
+        {
+          "id": "con_sh_comp",
+          "type": "subheading",
+          "text": "1. Gun Compartment & Table Slot Snapping"
+        },
+        {
+          "id": "con_split_comp",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "Preparation Swapping & SlotID Binding",
+          "content": "During Phase 1 Preparation, players open the **Gun Compartment** panel and drag part sprites onto matching **`SlotID` (`DropSpot`)** targets to swap weapons—destroying the old part, instantiating the replacement, resetting improved sprite states, and **refunding core charges** if the removed part was already upgraded. On spawn, **`SnapToSlot`** anchors parts to table box colliders until Phase 2 disables table slots.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092613/GunCompartment_ax4lev.gif",
+          "mediaCaption": "Gun Compartment — swapping components & refunding core charges"
+        },
+        {
+          "id": "con_gal_comp",
+          "type": "gallery",
+          "cols": 3,
+          "images": [
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092218/GunCom1_rwzjtt.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092221/GunCom2_xbpwgo.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092224/GunCom3_pce3va.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092252/GunCom4_eipnsn.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092257/GunCom5_bmgaws.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091959/SlotSnap1_s1wvrw.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091961/SlotSnap2_opzigm.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091964/SlotSnap3_ccpipc.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091965/SlotSnap4_ww2jkk.png"
+          ],
+          "captions": [
+            "GunCompartment Script (1/5)",
+            "GunCompartment Script (2/5)",
+            "GunCompartment Script (3/5)",
+            "GunCompartment Script (4/5)",
+            "GunCompartment Script (5/5)",
+            "Table SlotSnap Script (1/4)",
+            "Table SlotSnap Script (2/4)",
+            "Table SlotSnap Script (3/4)",
+            "Table SlotSnap Script (4/4)"
+          ],
+          "caption": "Gun Compartment & Table SlotSnapping C# Architecture"
+        },
+        {
+          "id": "con_sh_charge",
+          "type": "subheading",
+          "text": "2. Parts Charging (QTE) & Shake To Reset (Accelerometer)"
+        },
+        {
+          "id": "con_split_charge",
+          "type": "split",
+          "layout": "media-left",
+          "subtitle": "Core Activation & Material Upgrade QTE",
+          "content": "Players tap the **Core UI** to arm the energy core, then select any **Normal** gun part to trigger a **QTE**. Completing the QTE upgrades selected meshes to the **improved material** and deducts available core charges.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092556/PartCharging1_er9yap.gif",
+          "mediaCaption": "Parts Charging — QTE upgrade to improved material & core charge cost"
+        },
+        {
+          "id": "con_split_shake",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "Accelerometer Overcharge Recovery",
+          "content": "Charging a part flagged as disallowed (`false` in `HolderManager`) triggers the **Shake UI** prompt. Physically shaking the phone invokes **`ResetCharge()`** via the accelerometer script—reverting charged meshes back to base materials, refunding charges, and firing an inspector-configurable **`Magnitude` camera shake**.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092542/ShakeToReset2_vcxe2m.gif",
+          "mediaCaption": "Shake To Reset — phone accelerometer clears wrong upgrades & refunds core"
+        },
+        {
+          "id": "con_gal_charge_shake",
+          "type": "gallery",
+          "cols": 3,
+          "images": [
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092073/PartCharging2_tlkh34.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092075/PartCharging3_vllhan.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092078/PartCharging4_ohaqrm.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091978/ShakeToReset1_hnraku.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091980/ShakeToReset3_u2o1sl.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091957/ShakeToReset4_tcgxwp.png"
+          ],
+          "captions": [
+            "PartCharging Logic (1/3)",
+            "PartCharging Logic (2/3)",
+            "PartCharging Logic (3/3)",
+            "ShakeToReset Accelerometer Script (1/3)",
+            "ShakeToReset Accelerometer Script (2/3)",
+            "ShakeToReset Camera Shake Config (3/3)"
+          ],
+          "caption": "Parts Charging & Shake-to-Reset Accelerometer Implementation"
+        },
+        {
+          "id": "con_sh_drag",
+          "type": "subheading",
+          "text": "3. Gun Assembly — Raycast Dragging & Detach Deadzone"
+        },
+        {
+          "id": "con_split_drag",
+          "type": "split",
+          "layout": "media-left",
+          "subtitle": "MouseDown / MouseDrag / MouseUp Touch Lifecycle",
+          "content": "Touch raycasting projects screen `(X, Y)` motion onto the scene’s `X / Z` plane while **double-tapping drops** held pieces cleanly back onto the table. If a part is already snapped onto the main gun body, normal dragging pauses and starts a **hold-to-detach circular timer**—moving outside a configurable **deadzone radius** cancels removal before unparenting.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092640/DragMovement4_bwyga8.gif",
+          "mediaCaption": "Drag Movement — raycast pickup, XZ plane translation & detach radial timer"
+        },
+        {
+          "id": "con_gal_drag",
+          "type": "gallery",
+          "cols": 3,
+          "images": [
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092395/DragMovement1_r8ek01.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092397/DragMovement2_cdutwo.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092400/DragMovement3_fhq9se.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092407/DragMovement5_bikk9x.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092411/DragMovement6_tnqehz.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092414/DragMovement7_qigz1e.png"
+          ],
+          "caption": "DragMovement C# Script Breakdown (Phase 1–3 Input, Raycast & Detach Timer)"
+        },
+        {
+          "id": "con_sh_snap",
+          "type": "subheading",
+          "text": "4. Snapping Mechanics & Offset Compensation"
+        },
+        {
+          "id": "con_split_snap",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "SnappingManager, CoreChildTrigger & PartsTrigger Math",
+          "content": "**`CoreChildTrigger`** boxes validate matching **`Part Name` / GameObject tags** on entry. To align irregular weapon silhouettes flush, **`SnappingManager`** reads the offset from the part’s child **`PartsTrigger`**, aligns child trigger to body trigger, shifts the **parent position by that exact offset** while compensating sibling trigger offsets, **parents the part onto the main body**, and disables redundant triggers.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092528/SnapMech5_ptye0b.gif",
+          "mediaCaption": "Snapping Mechanics — offset-compensated attachment onto the weapon frame"
+        },
+        {
+          "id": "con_gal_snap",
+          "type": "gallery",
+          "cols": 3,
+          "images": [
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091967/SnapMech1_yjwxsl.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091968/SnapMech2_p6lmfd.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091970/SnapMech3_egn4gb.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091973/SnapMech4_c2dco4.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091974/SnapMech6_aeylyw.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091976/SnapMech7_xremdb.png"
+          ],
+          "caption": "SnappingManager, CoreChildTrigger & PartsTrigger C# Captures"
+        },
+        {
+          "id": "con_sh_vert",
+          "type": "subheading",
+          "text": "5. Vertical Movement, Outline & Opening Cutscene"
+        },
+        {
+          "id": "con_split_vert",
+          "type": "split",
+          "layout": "media-left",
+          "subtitle": "Vertical Elevation Buttons",
+          "content": "Up/down HUD controls elevate the **most recently selected weapon part** in height for easier docking—automatically locking movement whenever parts rest on the table.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092518/VerticalMovement1_z7s9kn.gif",
+          "mediaCaption": "Vertical Movement — height adjustment for held gun parts"
+        },
+        {
+          "id": "con_split_outline",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "Dynamic Slot Highlighting via Outline Index",
+          "content": "Dragging a component activates its Unity outline shader and passes its **outline index** to `SnappingManager.EnableOutline()`, lighting up the exact attachment socket on the main gun body.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092618/GunOutline3_hmyddi.gif",
+          "mediaCaption": "Gun Outline — highlighting both dragged part and destination body socket"
+        },
+        {
+          "id": "con_split_cutscene",
+          "type": "split",
+          "layout": "media-left",
+          "subtitle": "Door Animator Opening Cutscene",
+          "content": "Uses the 3D workshop door model + Animator triggered **only when launching from the Main Menu**, creating a seamless transition into level selection.",
+          "media": "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092562/OpeningCutscene3_xsoz5q.gif",
+          "mediaCaption": "Opening Cutscene — animated entrance transition from Main Menu"
+        },
+        {
+          "id": "con_gal_vert_out_cut",
+          "type": "gallery",
+          "cols": 3,
+          "images": [
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091870/VerticalMovement2_zwsua5.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091871/VerticalMovement3_ljv3pm.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783091871/VerticalMovement4_btjnl8.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092260/GunOutline1_drqran.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092262/GunOutline2_ieii3s.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092268/GunOutline4_w2ljnt.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092270/GunOutline5_tav6jp.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092104/OpeningCutscene1_oyejk0.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092106/OpeningCutscene2_sr6nze.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092108/OpeningCutscene4_genzdp.png"
+          ],
+          "caption": "Vertical Movement, EnableOutline() & Opening Cutscene Code Captures"
+        },
+        {
+          "id": "con_h_lighting",
+          "type": "heading",
+          "eyebrow": "04 · LIGHTING & POST-PROCESSING PIPELINE",
+          "text": "Baked Lighting & Mobile Post-Processing"
+        },
+        {
+          "id": "con_desc_lpp",
+          "type": "text",
+          "content": "**Level Selection (Basement)**: Single directional light on NPCs + **baked emission textures** under a **Dark Studio HDRI** skybox, enhanced with **Bloom**, **Gamma Gain**, subtle **Saturation**, and **Shadows / Midtones / Highlights** grading.\n**Gameplay Level**: Fully **baked point, spot, and directional lights** under a **Night Neon Street** skybox with lightweight **Bloom** on emissive guns and worktables to protect mobile framerate."
+        },
+        {
+          "id": "con_gal_lpp",
+          "type": "gallery",
+          "cols": 2,
+          "images": [
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092144/LightingPP1_ti9uec.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092147/LightingPP2_nc0ck4.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092149/LightingPP3_v7xetl.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092153/LightingPP4_nkuyyl.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092156/LightingPP5_vyupb2.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092159/LightingPP6_dhk1ue.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092161/LightingPP7_j7pxly.png",
+            "https://res.cloudinary.com/p8ukiuj2/image/upload/v1783092165/LightingPP8_meyflo.png"
+          ],
+          "caption": "Lighting & Post-Processing Profiles across Basement Hub & Gameplay Arena"
+        }
+      ]
+    },
+    {
+      "id": "tothetop",
+      "icon": "🏰",
+      "title": "To The Top",
+      "engine": "Unity 2021.1.9f1",
+      "platform": "PC Windows",
+      "year": "2021",
+      "status": "done",
+      "thumb": "https://static.wixstatic.com/media/97222b_02578c21c1b94868b99101af5e7df95d~mv2.png",
+      "desc": "2D physics precision platformer inspired by Jump King & Mighty Fling with projectile trajectory prediction and auto-save.",
+      "links": {
+        "Download": "https://drive.google.com/drive/folders/1tpeWxVjlD7iTwJ8XW7T4_0ZmrrjhbDJI?usp=sharing"
+      },
+      "sections": [
+        {
+          "id": "ttt_banner",
+          "type": "image",
+          "src": "https://static.wixstatic.com/media/97222b_02578c21c1b94868b99101af5e7df95d~mv2.png",
+          "caption": "To The Top — Unity 2021.1.9f1 · 35 Days (27 Jul – 31 Aug 2021) · UOWMKDU"
+        },
+        {
+          "id": "ttt_h_sum",
+          "type": "heading",
+          "eyebrow": "01 · AT A GLANCE",
+          "text": "Summary"
+        },
+        {
+          "id": "ttt_intro",
+          "type": "text",
+          "content": "**To The Top** is a 2D physics platformer developed for my Game Programming course at **UOWMKDU** where the player flings a ball to the top of a castle. Heavily inspired by **Jump King** and **Mighty Fling**, every fling **auto-saves** immediately so mistakes carry real consequence."
+        },
+        {
+          "id": "ttt_list",
+          "type": "list",
+          "items": [
+            "**Physics & Traversal**: `Drag & Fling` launch mechanics, live **Projectile Prediction Line**, and moving platforms.",
+            "**Progression & Polish**: Automatic per-move **Save & Load System**, **2D sprite character animation**, dialogue triggers, and powerup items."
+          ]
+        },
+        {
+          "id": "ttt_callout",
+          "type": "callout",
+          "tone": "blue",
+          "label": "CHALLENGE & SOLUTION",
+          "title": "Translating Mobile Touch Fling Tutorials to Tactile PC Mouse & Keyboard Controls",
+          "content": "The hardest hurdle was dialing in crisp drag-and-fling impulses alongside an accurate **projectile prediction arc**. Available tutorial references targeted mobile touch input, so I **translated touch-drag math to PC mouse/keyboard controls** and tuned launch damping and arc sampling to match the tight, unforgiving feel of *Jump King* and *Mighty Fling*."
+        },
+        {
+          "id": "ttt_h_gal",
+          "type": "heading",
+          "eyebrow": "02 · GAMEPLAY & CODE",
+          "text": "Screenshots & Script Architecture"
+        },
+        {
+          "id": "ttt_gal_game",
+          "type": "gallery",
+          "cols": 3,
+          "images": [
+            "https://static.wixstatic.com/media/97222b_e7c9ac6b20874afe9db5bdddd2579a7c~mv2.png",
+            "https://static.wixstatic.com/media/97222b_4ca65c63e6224d5eafbbf4b6c399acb1~mv2.png",
+            "https://static.wixstatic.com/media/97222b_d5f247bd621d44148f73f4d5e4826d67~mv2.png",
+            "https://static.wixstatic.com/media/97222b_243974f9c669470da9ba5005a6d4ec62~mv2.png",
+            "https://static.wixstatic.com/media/97222b_99fac90f6fa643d6bbb3ca86a41d3c48~mv2.png",
+            "https://static.wixstatic.com/media/97222b_16835acbe5e44f2ba7a75797c9542753~mv2.png"
+          ],
+          "captions": [
+            "Screenshot 1 — Castle Ascent",
+            "Screenshot 2 — Trajectory Aiming",
+            "Screenshot 3 — Mid-Tower Platforming",
+            "Screenshot 4 — Hazards & Powerups",
+            "Screenshot 5 — Dialogue & Checkpoints",
+            "Screenshot 6 — Upper Castle Summit"
+          ],
+          "caption": "To The Top — In-Game Screenshots"
+        },
+        {
+          "id": "ttt_gal_code",
+          "type": "gallery",
+          "cols": 2,
+          "images": [
+            "https://static.wixstatic.com/media/97222b_266d4c3f10b7479a81da25189200c510~mv2.png",
+            "https://static.wixstatic.com/media/97222b_188a19c45a6c416a86a0d32d7f23fb4f~mv2.png",
+            "https://static.wixstatic.com/media/97222b_d07e3baf024943019d8d87376437845f~mv2.png",
+            "https://static.wixstatic.com/media/97222b_f12ab20700034a95b9c0f89dbd5d333b~mv2.png"
+          ],
+          "captions": [
+            "OnDrag — Drag Impulse Evaluation",
+            "Trajectory — Projectile Prediction Line Arc",
+            "Drag Input — PC Mouse Translation",
+            "Ball Movement — Physics & Launch Velocity"
+          ],
+          "caption": "C# Gameplay Scripts — Drag Input, Trajectory Prediction & Physics"
+        }
+      ]
+    },
+    {
+      "id": "ronin",
+      "icon": "⚔️",
+      "title": "Ronin",
+      "engine": "Unity 2021.1.18f1",
+      "platform": "PC Windows",
+      "year": "2021",
+      "status": "done",
+      "thumb": "https://static.wixstatic.com/media/97222b_53fbacc972dd4f03a27ca1d9b03c70f7~mv2.png",
+      "desc": "2D hack-and-slash side-scroller by Scaredy-Cat Studio featuring grappling hook traversal, checkpoints & blood VFX.",
+      "links": {
+        "Download": "https://uowmgames.itch.io/ronin"
+      },
+      "sections": [
+        {
+          "id": "ronin_banner",
+          "type": "image",
+          "src": "https://static.wixstatic.com/media/97222b_53fbacc972dd4f03a27ca1d9b03c70f7~mv2.png",
+          "caption": "Ronin — Unity 2021.1.18f1 · 91 Days (31 May – 30 Aug 2021) · Lead Programmer (Team Scaredy-Cat)"
+        },
+        {
+          "id": "ronin_h_sum",
+          "type": "heading",
+          "eyebrow": "01 · AT A GLANCE",
+          "text": "Summary & Lead Programmer Role"
+        },
+        {
+          "id": "ronin_intro",
+          "type": "text",
+          "content": "**Ronin** is a 2D Hack & Slash side-scrolling game created with **Team Scaredy-Cat** during Game Project Studio—my **very first group project in Unity**, where I served as **Lead Programmer**. Players control **Nakamoto Yuji**, an Izumi clan ninja revived as a revenant seeking vengeance against the Kurayami clan by mastering both ninja agility and revenant powers."
+        },
+        {
+          "id": "ronin_list",
+          "type": "list",
+          "items": [
+            "**Player Movement & Combat**: Built responsive side-scrolling locomotion and melee combat scripts.",
+            "**Grappling Hook Traversal**: Implemented physics-driven grapple targeting and swing/pull traversal (`Grapple Implement`).",
+            "**Save / Load Checkpoint System**: Engineered serialized checkpoint persistence for restoring player state & progress.",
+            "**Blood Particle Effects**: Configured custom Unity particle systems & inspector curves for combat hit impact VFX."
+          ]
+        },
+        {
+          "id": "ronin_h_gal",
+          "type": "heading",
+          "eyebrow": "02 · GAMEPLAY & CODE",
+          "text": "Screenshots & C# Systems Showcase"
+        },
+        {
+          "id": "ronin_gal_game",
+          "type": "gallery",
+          "cols": 2,
+          "images": [
+            "https://static.wixstatic.com/media/97222b_3e6b557dd06e4b32993d43523edccab0~mv2.png",
+            "https://static.wixstatic.com/media/97222b_4de87d115d714255a476622d8617cc73~mv2.png",
+            "https://static.wixstatic.com/media/97222b_44647889b4854cbab1dff462e39c1d9d~mv2.png",
+            "https://static.wixstatic.com/media/97222b_f567158f5f314333944478e7d3f97458~mv2.png"
+          ],
+          "caption": "Ronin — In-Game Combat & Environment Screenshots"
+        },
+        {
+          "id": "ronin_gal_code",
+          "type": "gallery",
+          "cols": 2,
+          "images": [
+            "https://static.wixstatic.com/media/97222b_2cc9349eaac14a22bee8d7f7023a67a6~mv2.png",
+            "https://static.wixstatic.com/media/97222b_cd10d9b68bb442b5bfffca6d45d344b2~mv2.png",
+            "https://static.wixstatic.com/media/97222b_04a583dbf67f40d6a1e480c19f547526~mv2.png",
+            "https://static.wixstatic.com/media/97222b_f1dd65fc699947bb844dc99d8240b180~mv2.png",
+            "https://static.wixstatic.com/media/97222b_369437a327ac4344b1b4299a9f9480ae~mv2.png",
+            "https://static.wixstatic.com/media/97222b_37b41e5604f84b4b810358173ac79115~mv2.png",
+            "https://static.wixstatic.com/media/97222b_ee79f5f596b442a59616d3bed5c52ad4~mv2.png"
+          ],
+          "captions": [
+            "Checkpoint Trigger Logic",
+            "Save & Load System Serialization",
+            "Loading Player Data Routine",
+            "Grapple Implement (Part 1)",
+            "Grapple Implement (Part 2)",
+            "Blood Effect Trigger Script",
+            "Blood Effect Particle Inspector"
+          ],
+          "caption": "Ronin — C# Scripts & Particle Inspector Captures"
+        }
+      ]
+    },
+    {
+      "id": "huntingnight",
+      "icon": "🌙",
+      "title": "Hunter Night",
+      "engine": "Stencyl 4.0.2",
+      "platform": "Flash / Browser",
+      "year": "2020",
+      "status": "done",
+      "thumb": "https://static.wixstatic.com/media/97222b_294955e4268540a984ed5e0bd6b85eff~mv2.png/v1/crop/x_0,y_172,w_1918,h_1044/fill/w_404,h_220,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/2_PNG.png",
+      "desc": "7-day Stencyl platformer testing custom hand-made pixel art assets alongside stomp combat and physics box crushes.",
+      "links": {
+        "Download": "https://drive.google.com/file/d/1z9jnyZNyiDeaBttqGzuMTJMv6huJk3Fd/view?usp=sharing"
+      },
+      "sections": [
+        {
+          "id": "hn_banner",
+          "type": "image",
+          "src": "https://static.wixstatic.com/media/97222b_294955e4268540a984ed5e0bd6b85eff~mv2.png/v1/crop/x_0,y_172,w_1918,h_1044/fill/w_404,h_220,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/2_PNG.png",
+          "caption": "Hunter Night — Stencyl 4.0.2 (Runs on Flash · 7 Days)"
+        },
+        {
+          "id": "hn_h_sum",
+          "type": "heading",
+          "eyebrow": "01 · PROTOTYPE EXPERIMENT",
+          "text": "Art-to-Engine Integration & Core Mechanics"
+        },
+        {
+          "id": "hn_split_demo",
+          "type": "split",
+          "layout": "text-left",
+          "subtitle": "Hand-Made Pixel Art & Platforming Logic",
+          "content": "**Hunter Night** is a 7-day Stencyl platformer built to test importing **all my own hand-crafted art assets**—backgrounds, tilesets, props, and characters—directly into an interactive game loop.",
+          "media": "https://static.wixstatic.com/media/97222b_9ce15e212b9547e9ae64ad9f63ee378d~mv2.gif",
+          "mediaCaption": "Hunter Night — Live pixel platforming & enemy stomp gameplay"
+        },
+        {
+          "id": "hn_list",
+          "type": "list",
+          "items": [
+            "**All Custom Pixel Art**: Authored original backgrounds, modular tilesets, props, and animated sprites from scratch.",
+            "**Enemy AI & Player Controls**: Implemented simple **Ghost Patrol** AI alongside player movement, jumping, and enemy **Stomp Skill**.",
+            "**Physics Box Crush**: Added hazard logic allowing falling physics boxes to **crush enemies** on impact."
+          ]
+        },
+        {
+          "id": "hn_h_code",
+          "type": "heading",
+          "eyebrow": "02 · STENCYL LOGIC BLOCKS",
+          "text": "Behavior Script Captures"
+        },
+        {
+          "id": "hn_gal_code",
+          "type": "gallery",
+          "cols": 3,
+          "images": [
+            "https://static.wixstatic.com/media/97222b_931a0353b02d423bb0c06e8da6a6e30e~mv2.png",
+            "https://static.wixstatic.com/media/97222b_73c8be32f41a4e91b14c73abbdbd4f6c~mv2.png",
+            "https://static.wixstatic.com/media/97222b_a720bb37797741ffb77bd62bb0ef08f3~mv2.png"
+          ],
+          "captions": [
+            "GhostPatrol — Enemy Patrol Behavior",
+            "HPManager — Health & Damage Handling",
+            "StompSkill — Player Jump Stomp & Crush Logic"
+          ],
+          "caption": "Stencyl Behavior Logic — GhostPatrol, HPManager & StompSkill"
+        }
+      ]
+    }
+  ],
+  "customPages": [],
+  "scrollThresholdPct": 5
+};
+const SFX={_c:null,muted:false,_g(){if(!this._c)this._c=new(window.AudioContext||window.webkitAudioContext)();if(this._c.state==='suspended')this._c.resume();return this._c;},play(t){if(this.muted)return;try{const c=this._g(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);const n=c.currentTime;if(t==='easter'){[440,550,660,880].forEach((f,i)=>{const oo=c.createOscillator(),gg=c.createGain();oo.connect(gg);gg.connect(c.destination);oo.type='square';oo.frequency.value=f;const tt=n+i*.1;gg.gain.setValueAtTime(.045,tt);gg.gain.exponentialRampToValueAtTime(.0001,tt+.15);oo.start(tt);oo.stop(tt+.15);});return;}o.type='sine';if(t==='click'){o.frequency.setValueAtTime(520,n);o.frequency.exponentialRampToValueAtTime(480,n+.06);g.gain.setValueAtTime(.06,n);g.gain.exponentialRampToValueAtTime(.0001,n+.09);o.start(n);o.stop(n+.09);}else if(t==='open'){o.frequency.setValueAtTime(280,n);o.frequency.exponentialRampToValueAtTime(560,n+.18);g.gain.setValueAtTime(.055,n);g.gain.exponentialRampToValueAtTime(.0001,n+.22);o.start(n);o.stop(n+.22);}else if(t==='close'){o.frequency.setValueAtTime(440,n);o.frequency.exponentialRampToValueAtTime(200,n+.14);g.gain.setValueAtTime(.055,n);g.gain.exponentialRampToValueAtTime(.0001,n+.16);o.start(n);o.stop(n+.16);}else if(t==='tab'){o.frequency.setValueAtTime(660,n);g.gain.setValueAtTime(.035,n);g.gain.exponentialRampToValueAtTime(.0001,n+.07);o.start(n);o.stop(n+.07);}else if(t==='drop'){o.frequency.setValueAtTime(180,n);o.frequency.exponentialRampToValueAtTime(120,n+.12);g.gain.setValueAtTime(.075,n);g.gain.exponentialRampToValueAtTime(.0001,n+.14);o.start(n);o.stop(n+.14);}}catch(e){}}};
+function toggleMute(){SFX.muted=!SFX.muted;document.getElementById('nav-mute').textContent=SFX.muted?'🔇':'🔊';const m=document.getElementById('bg-music');if(m){SFX.muted?m.pause():m.play().catch(()=>{});}}
+function isMp4(u){return /\.(mp4|webm|mov)(\?|$)/i.test(u||'')||(u||'').includes('/video/upload/');}
+function ytId(s){const t=(s||'').trim();const ps=[/[?&]v=([a-zA-Z0-9_-]{11})/,/youtu\.be\/([a-zA-Z0-9_-]{11})/,/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/];for(const r of ps){const m=t.match(r);if(m&&m[1])return m[1];}return t;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function renderMediaTag(src,alt,cls){if(!src)return '<div class="media-fallback">'+esc(alt||'Media pending')+'</div>';if(isMp4(src))return '<video class="'+(cls||'')+'" src="'+esc(src)+'" autoplay loop muted playsinline></video>';return '<img class="'+(cls||'')+'" src="'+esc(src)+'" alt="'+esc(alt)+'" referrerpolicy="no-referrer" loading="lazy" onerror="this.outerHTML=\'<div class=media-fallback>'+esc(alt||'Media unavailable')+'</div>\'">';}
 
-    <!-- LAYER 2: The Main Website (Hidden until start) -->
-    <main id="main-content">
-        <!-- Cinematic Genshin-style Hero Section -->
-        <section id="hero">
-            <div class="video-background">
-                <!-- Replace with your unlisted YouTube/Vimeo embed later -->
-                <div class="placeholder-bg"></div>
-            </div>
-            <div class="hero-content">
-                <h1 class="reveal-text">System Ready.</h1>
-                <p class="reveal-text">C++ & Unreal Engine 5 Developer</p>
-            </div>
-        </section>
+let pts=[],mouse={x:-999,y:-999},isDragging=false;
+function initParticles(){const cv=document.getElementById('cv'),cx=cv.getContext('2d');const rs=()=>{cv.width=innerWidth;cv.height=innerHeight;};rs();addEventListener('resize',rs);pts=Array.from({length:60},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,r:Math.random()*1.1+.35,al:Math.random()*.26+.07,col:Math.random()>.5?'#A89BD4':'#C8A96E'}));const rip=[];window.emitShockwave=(x,y,str=1.5)=>{pts.forEach(p=>{const dx=p.x-x,dy=p.y-y,d=Math.hypot(dx,dy);if(d<180&&d>0){const f=str*(1-d/180);p.vx+=dx/d*f;p.vy+=dy/d*f;}});rip.push({x,y,r:0,al:.35,sp:5});};function draw(){cx.clearRect(0,0,cv.width,cv.height);pts.forEach(p=>{const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<100&&d>0){const f=(1-d/100)*(isDragging?2:.55);p.vx+=dx/d*f*.16;p.vy+=dy/d*f*.16;}p.vx*=.985;p.vy*=.985;p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>cv.width)p.vx*=-1;if(p.y<0||p.y>cv.height)p.vy*=-1;cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fillStyle=p.col;cx.globalAlpha=p.al;cx.fill();});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<100){cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);cx.strokeStyle='#A89BD4';cx.globalAlpha=(1-d/100)*.05;cx.lineWidth=.4;cx.stroke();}}for(let i=rip.length-1;i>=0;i--){const rp=rip[i];cx.beginPath();cx.arc(rp.x,rp.y,rp.r,0,Math.PI*2);cx.strokeStyle='rgba(200,169,110,'+rp.al+')';cx.lineWidth=.8;cx.globalAlpha=1;cx.stroke();rp.r+=rp.sp;rp.al*=.87;if(rp.al<.01)rip.splice(i,1);}cx.globalAlpha=1;requestAnimationFrame(draw);}draw();document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});}
 
-        <!-- Portfolio Projects Grid -->
-        <section id="portfolio">
-            <h2>Recent Operations</h2>
-            <div id="project-grid"></div>
-        </section>
-    </main>
+let autoSnapUntil=0,prevSy=0;
+function scrollToSec(id){autoSnapUntil=Date.now()+800;document.getElementById(id)?.scrollIntoView({behavior:'smooth'});SFX.play('click');}
+const page=document.getElementById('page');page.style.display='none';
+let deskBuilt=false;
 
-    <script src="app.js"></script>
+function runLoader(){
+  const TOTAL=18;document.getElementById('l-name').textContent=CONFIG.name.toUpperCase();document.getElementById('l-role').textContent=CONFIG.role.toUpperCase();
+  document.getElementById('ja-bg').textContent=('開発者ポートフォリオウェブゲームプログラミング技術創造　').repeat(450);
+  const msgsEl=document.getElementById('l-msgs'),fi=document.getElementById('l-fill'),ci=document.getElementById('l-cnt'),we=document.getElementById('l-wel');
+  let idx=0;
+  function next(){
+    if(idx>=CONFIG.loadMsgs.length){
+      we.classList.add('show');
+      setTimeout(()=>{
+        document.getElementById('loader').classList.add('out');
+        setTimeout(()=>{
+          document.getElementById('loader').style.display='none';
+          page.style.display='block';
+          initParticles();populateSite();
+          const obs=new IntersectionObserver(es=>{if(es[0].isIntersecting&&!deskBuilt){deskBuilt=true;buildDesktop();}},{threshold:.12});
+          obs.observe(document.getElementById('s-desk'));
+          if(CONFIG.bgMusicUrl){const m=document.getElementById('bg-music');m.src=CONFIG.bgMusicUrl;m.volume=.25;document.addEventListener('click',()=>m.play().catch(()=>{}),{once:true});}
+        },720);
+      },700);
+      return;
+    }
+    const d=document.createElement('div');d.className='l-msg';d.textContent=CONFIG.loadMsgs[idx];msgsEl.appendChild(d);
+    const p=(idx+1)/CONFIG.loadMsgs.length;fi.style.width=p*100+'%';ci.textContent='Assets : '+Math.round(p*TOTAL)+' / '+TOTAL;idx++;setTimeout(next,340);
+  }
+  setTimeout(next,350);
+}
+
+function populateSite(){
+  document.getElementById('nav-logo').textContent=CONFIG.name;
+  const resEl=document.getElementById('nav-resume');
+  if(!CONFIG.resumeUrl||CONFIG.resumeUrl==='#'){resEl.style.display='none';}else{resEl.href=CONFIG.resumeUrl;}
+  const em=CONFIG.social.find(s=>s.href.startsWith('mailto:'));
+  document.getElementById('nav-contact').onclick=()=>{SFX.play('click');if(em)location.href=em.href;};
+  document.getElementById('hero-name').textContent=CONFIG.name.toUpperCase();
+  document.getElementById('hero-jp').textContent=CONFIG.nameJP;
+  document.getElementById('hero-role').textContent=CONFIG.role.toUpperCase();
+  if(CONFIG.heroMediaUrl){
+    const bg=document.getElementById('hero-bg');
+    bg.insertAdjacentHTML('beforeend',renderMediaTag(CONFIG.heroMediaUrl,CONFIG.name,'hero-bg-media'));
+  }
+  const navLinks=document.getElementById('nav-links');
+  (CONFIG.customPages||[]).filter(cp=>cp.showInNav).forEach(cp=>{
+    const s=document.createElement('span');s.className='nav-link';s.textContent=cp.navLabel||cp.title;s.onclick=()=>openCustomPage(cp.id);navLinks.appendChild(s);
+  });
+  document.getElementById('art-title').textContent=CONFIG.name+' — Art';
+  document.getElementById('art-copy').textContent='© '+new Date().getFullYear()+' '+CONFIG.name;
+  document.getElementById('art-links').innerHTML=CONFIG.social.map(s=>'<a class="art-fl" href="'+esc(s.href)+'" target="_blank">'+esc(s.label)+'</a>').join('');
+  document.getElementById('art-grid').innerHTML=(CONFIG.art||[]).map((a,i)=>{
+    const yt=ytId(a.youtubeId||'');
+    const thumb=yt&&!yt.startsWith('REPLACE')?'https://img.youtube.com/vi/'+yt+'/hqdefault.jpg':a.src;
+    return '<div class="art-item" onclick="openArtLb('+i+')">'+renderMediaTag(thumb,a.title,'')+'<div class="art-cap"><div class="art-cap-t">'+esc(a.title)+'</div><div class="art-cap-m">'+esc(a.medium)+' · '+esc(a.year)+'</div></div></div>';
+  }).join('');
+  page.addEventListener('scroll',()=>{
+    const sy=page.scrollTop,dir=sy>prevSy?1:sy<prevSy?-1:0;prevSy=sy;
+    document.getElementById('nav').classList.toggle('solid',sy>60);
+    let act='s-hero';['s-hero','s-desk','s-art'].forEach(id=>{const el=document.getElementById(id);if(el&&el.offsetTop-90<=sy)act=id;});
+    document.querySelectorAll('.nav-link[data-sec]').forEach(l=>l.classList.toggle('active',l.dataset.sec===act));
+    if(innerWidth>=768&&dir!==0&&Date.now()>autoSnapUntil&&!document.getElementById('po').classList.contains('open')&&!document.getElementById('lb').classList.contains('open')){
+      const dEl=document.getElementById('s-desk'),aEl=document.getElementById('s-art');
+      if(dEl&&aEl){
+        const dTop=dEl.offsetTop,aTop=aEl.offsetTop,pct=Math.max(1,Math.min(45,CONFIG.scrollThresholdPct||5)),th=Math.max(8,Math.round(page.clientHeight*(pct/100)));
+        if(dir===1){
+          if(sy>=th&&sy<dTop-th){autoSnapUntil=Date.now()+720;page.scrollTo({top:dTop,behavior:'smooth'});}
+          else if(sy>=dTop+th&&sy<aTop-th){autoSnapUntil=Date.now()+720;page.scrollTo({top:aTop,behavior:'smooth'});}
+        }else{
+          if(sy<=dTop-th&&sy>th){autoSnapUntil=Date.now()+720;page.scrollTo({top:0,behavior:'smooth'});}
+          else if(sy<=aTop-th&&sy>dTop+th){autoSnapUntil=Date.now()+720;page.scrollTo({top:dTop,behavior:'smooth'});}
+        }
+      }
+    }
+  });
+}
+
+let Z=10;
+function getLayout(id){
+  const W=Math.max(innerWidth,1024),H=Math.max(innerHeight,660);
+  const top=54,bot=96,availH=H-top-bot,pad=18;
+  const col1=Math.min(440,Math.floor(W*0.33)),col2=Math.min(340,Math.floor(W*0.25)),col3=Math.max(280,W-col1-col2-pad*4);
+  const row1=Math.floor(availH*0.46),row2=availH-row1-14;
+  const map={
+    terminal:{x:pad,y:top,w:col1,h:row1},
+    about:{x:pad*2+col1,y:top,w:col2,h:row1},
+    experience:{x:pad*3+col1+col2,y:top,w:col3,h:row1},
+    skills:{x:pad,y:top+row1+14,w:col1,h:row2},
+    projects:{x:pad*2+col1,y:top+row1+14,w:Math.floor((col2+col3+pad)*0.62),h:row2},
+    map:{x:pad*3+col1+Math.floor((col2+col3+pad)*0.62),y:top+row1+14,w:Math.max(220,(col2+col3+pad)-Math.floor((col2+col3+pad)*0.62)-pad),h:row2}
+  };
+  return map[id];
+}
+function focusW(id){document.querySelectorAll('.win').forEach(w=>w.classList.remove('focus'));const w=document.getElementById('w-'+id);if(w){w.style.zIndex=++Z;w.classList.add('focus');}}
+function closeW(id){SFX.play('close');document.getElementById('w-'+id)?.classList.add('gone');document.querySelector('.dki[data-id="'+id+'"]')?.classList.remove('on');}
+function openW(id){const w=document.getElementById('w-'+id);if(!w)return;SFX.play('open');w.classList.remove('gone');focusW(id);document.querySelector('.dki[data-id="'+id+'"]')?.classList.add('on');if(id==='map')initMap();}
+function toggleW(id){const w=document.getElementById('w-'+id);w?.classList.contains('gone')?openW(id):closeW(id);}
+function resetLayout(){['terminal','about','experience','skills','projects','map'].forEach(id=>{const w=document.getElementById('w-'+id),L=getLayout(id);if(w&&L){w.classList.remove('gone');w.style.left=L.x+'px';w.style.top=L.y+'px';w.style.width=L.w+'px';w.style.height=L.h+'px';document.querySelector('.dki[data-id="'+id+'"]')?.classList.add('on');}});SFX.play('open');}
+
+function mkWin(id,title,html){
+  const L=getLayout(id),isMob=innerWidth<769,el=document.createElement('div');
+  el.className='win';el.id='w-'+id;el.style.zIndex=++Z;
+  if(!isMob)el.style.cssText+='left:'+L.x+'px;top:'+L.y+'px;width:'+L.w+'px;height:'+L.h+'px;';
+  el.innerHTML='<div class="wbar"><div class="wdots"><div class="dot dr" onclick="closeW(\''+id+'\')"></div><div class="dot dy"></div><div class="dot dg" onclick="focusW(\''+id+'\')"></div></div><div class="wtitle">'+esc(title)+'</div></div><div class="wbody" id="wb-'+id+'">'+html+'</div><div class="wrsz"></div>';
+  document.getElementById('wins').appendChild(el);
+  if(!isMob){
+    const bar=el.querySelector('.wbar');let on=false,ox,oy;
+    bar.addEventListener('mousedown',e=>{if(e.target.classList.contains('dot'))return;on=true;isDragging=true;const desk=document.getElementById('s-desk').getBoundingClientRect();ox=e.clientX-el.offsetLeft;oy=e.clientY-(el.offsetTop+desk.top);focusW(id);emitShockwave(e.clientX,e.clientY,1.8);SFX.play('tab');});
+    document.addEventListener('mousemove',e=>{if(!on)return;const desk=document.getElementById('s-desk');const dr=desk.getBoundingClientRect();el.style.left=Math.max(0,Math.min(desk.offsetWidth-el.offsetWidth,e.clientX-ox))+'px';el.style.top=Math.max(48,Math.min(desk.offsetHeight-el.offsetHeight,e.clientY-dr.top-oy))+'px';});
+    document.addEventListener('mouseup',()=>{if(on){on=false;isDragging=false;SFX.play('drop');}});
+    const rsz=el.querySelector('.wrsz');let ron=false,sx,sy,sw,sh;
+    rsz.addEventListener('mousedown',e=>{e.stopPropagation();ron=true;sx=e.clientX;sy=e.clientY;sw=el.offsetWidth;sh=el.offsetHeight;});
+    document.addEventListener('mousemove',e=>{if(!ron)return;el.style.width=Math.max(220,sw+e.clientX-sx)+'px';el.style.height=Math.max(130,sh+e.clientY-sy)+'px';});
+    document.addEventListener('mouseup',()=>ron=false);
+  }
+  el.addEventListener('mousedown',()=>focusW(id));
+}
+
+const hl=s=>s.replace(/\|(\w+):([^|]+)\|/g,(_,t,v)=>'<span class="'+t+'">'+esc(v)+'</span>');
+function buildTerminal(){
+  mkWin('terminal',CONFIG.name+'.js','<div class="tc" id="tc"></div>');
+  const out=document.getElementById('tc');let i=0;
+  function tick(){
+    if(i>=CONFIG.code.length){
+      out.insertAdjacentHTML('beforeend','<div class="cli-wrap"><div id="cli-log"></div><div class="cli-row"><span class="cli-prompt">vincent@nimbus:~$</span><input class="cli-input" id="cli-in" placeholder="type help, ls, open chiyo..." autocomplete="off"></div></div>');
+      const inp=document.getElementById('cli-in'),log=document.getElementById('cli-log');
+      inp.addEventListener('keydown',e=>{
+        if(e.key!=='Enter')return;
+        const raw=inp.value.trim(),cmd=raw.toLowerCase();inp.value='';if(!raw)return;
+        let res='';
+        if(cmd==='help')res='Commands: ls, open <project>, cat about, skills, art, clear';
+        else if(cmd==='ls')res=CONFIG.projects.map(p=>p.id).join('  ');
+        else if(cmd==='cat about')res=CONFIG.bio;
+        else if(cmd==='skills')res=CONFIG.skills.map(s=>s.cat+': '+s.items.join(', ')).join('\n');
+        else if(cmd==='art'){scrollToSec('s-art');res='Scrolling to Art gallery...';}
+        else if(cmd==='clear'){log.innerHTML='';return;}
+        else if(cmd.startsWith('open ')){const q=cmd.slice(5).trim();const pr=CONFIG.projects.find(p=>p.id.toLowerCase()===q||p.title.toLowerCase().includes(q));if(pr){openProj(pr.id);res='Opening '+pr.title+'...';}else res='Project not found: '+q;}
+        else{const ee=CONFIG.passcodes.find(p=>p.code===raw.toUpperCase());if(ee){showEgg(ee);res='Passcode accepted!';}else res='Unknown command. Try "help".';}
+        log.insertAdjacentHTML('beforeend','<div style="color:var(--dim);margin:.25rem 0">$ '+esc(raw)+'</div><div style="color:var(--green);white-space:pre-wrap;margin-bottom:.35rem">'+esc(res)+'</div>');
+        out.scrollTop=out.scrollHeight;
+      });
+      return;
+    }
+    const d=document.createElement('div');d.className='tl';d.innerHTML=hl(CONFIG.code[i++]);out.appendChild(d);setTimeout(tick,65);
+  }
+  setTimeout(tick,250);
+}
+
+function buildDesktop(){
+  buildTerminal();
+  mkWin('about','about.md','<div class="ab"><div class="ab-top"><div class="ab-av">'+(CONFIG.avatarUrl?renderMediaTag(CONFIG.avatarUrl,CONFIG.name,''):'🎮')+'</div><div><div class="ab-name">'+esc(CONFIG.name)+'</div><div class="ab-role">'+esc(CONFIG.role)+'<br><span style="color:var(--accent)">'+esc(CONFIG.company)+'</span></div></div></div><p class="ab-bio">'+esc(CONFIG.bio)+'</p><div class="ab-div"></div><div class="ab-lnks">'+CONFIG.social.map(s=>'<a class="ab-lnk" href="'+esc(s.href)+'" target="_blank">'+esc(s.label)+'</a>').join('')+'</div></div>');
+  mkWin('experience','experience.md','<div class="exp-wrap">'+CONFIG.experience.map(e=>'<div class="exp-item"><div class="exp-yr">'+esc(e.year)+'</div><div class="exp-org">'+esc(e.org)+'</div><div class="exp-role">'+esc(e.role)+'</div><div class="exp-desc">'+esc(e.desc)+'</div>'+(e.tags.length?'<div class="exp-tags">'+e.tags.map(esc).join(' · ')+'</div>':'')+'</div>').join('')+'</div>');
+  mkWin('skills','skills.json','<div class="sk-wrap" id="sk-wrap"></div>');
+  requestAnimationFrame(initPhysics);
+  const latestYr=Math.max(...CONFIG.projects.map(p=>+p.year||0));
+  mkWin('projects','projects/','<div class="exp-tb"><span>projects/ · '+CONFIG.projects.length+' case studies</span><span style="color:var(--accent)">Select card to inspect ↗</span></div><div class="exp-grid">'+CONFIG.projects.map(p=>{const isL=+p.year===latestYr;const eng=(p.engine||'').split(' ').slice(0,2).join(' ');return '<div class="ffile'+(isL?' feat':'')+'" onclick="openProj(\''+p.id+'\')"><div class="ff-cov">'+(p.thumb?'<img src="'+esc(p.thumb)+'" alt="'+esc(p.title)+'" referrerpolicy="no-referrer" loading="lazy">':'<span class="ff-icon">'+p.icon+'</span>')+(isL?'<div class="ff-latest">LATEST</div>':'')+'</div><div class="ff-body"><span class="ff-name">'+(p.thumb?p.icon+' ':'')+esc(p.title)+'</span><span class="ff-yr">'+esc(p.year)+' · '+esc(eng)+'</span><div class="ff-cta"><span style="color:'+(p.status==='done'?'var(--green)':'var(--orange)')+'">'+(p.status==='done'?'Completed':'In Progress')+'</span><span>Inspect ↗</span></div></div></div>';}).join('')+(CONFIG.customPages||[]).map(cp=>'<div class="ffile" onclick="openCustomPage(\''+cp.id+'\')"><div class="ff-cov"><span class="ff-icon">'+(cp.icon||'📄')+'</span></div><div class="ff-body"><span class="ff-name">'+esc(cp.title)+'</span><span class="ff-yr">Custom Page</span><div class="ff-cta"><span>Page</span><span>Open ↗</span></div></div></div>').join('')+'</div>');
+  mkWin('map','location.map','<div id="map-wrap"><div id="lmap"></div><a class="map-pin" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(CONFIG.location.city||'Kota Kinabalu, Malaysia')+'" target="_blank" rel="noreferrer">📍 '+esc(CONFIG.location.city)+' ↗</a></div>');
+  setTimeout(initMap,250);
+  document.getElementById('social').innerHTML=CONFIG.social.map((s,i)=>(i>0?'<span style="color:var(--dimmer)">·</span>':'')+'<a class="sb-lnk" href="'+esc(s.href)+'" target="_blank">'+esc(s.label)+'</a>').join('');
+  const WINS=[['terminal','Terminal','⌨️'],['about','About','👤'],['experience','Experience','💼'],['skills','Skills','🎯'],['projects','Projects','📁'],['map','Map','🗺️']];
+  document.getElementById('dock').innerHTML=WINS.map(w=>'<div class="dki on" data-id="'+w[0]+'" onclick="toggleW(\''+w[0]+'\')"><span class="dki-ico">'+w[2]+'</span><span class="dki-lbl">'+w[1]+'</span></div>').join('')+'<div class="dki" onclick="resetLayout()"><span class="dki-ico">↺</span><span class="dki-lbl">Reset</span></div>';
+}
+
+function initPhysics(){
+  const wrap=document.getElementById('sk-wrap');if(!wrap)return;
+  const PAD=8,LH=22,chips=[];let zones=[];
+  function calcZones(){
+    const bw=wrap.offsetWidth||420,bh=wrap.offsetHeight||280,cw=Math.floor((bw-PAD*3)/2),rh=Math.floor((bh-PAD*3)/2);
+    zones=[{cat:CONFIG.skills[0]?.cat,x1:PAD,y1:PAD,x2:PAD+cw,y2:PAD+rh},{cat:CONFIG.skills[1]?.cat,x1:PAD*2+cw,y1:PAD,x2:PAD*2+cw*2,y2:PAD+rh},{cat:CONFIG.skills[2]?.cat,x1:PAD,y1:PAD*2+rh,x2:PAD+cw,y2:PAD*2+rh*2},{cat:CONFIG.skills[3]?.cat,x1:PAD*2+cw,y1:PAD*2+rh,x2:PAD*2+cw*2,y2:PAD*2+rh*2}];
+    wrap.querySelectorAll('.sk-zone-box,.sk-cat-lbl').forEach(n=>n.remove());
+    zones.forEach(z=>{if(!z.cat)return;const bg=document.createElement('div');bg.className='sk-zone-box';bg.style.cssText='position:absolute;left:'+z.x1+'px;top:'+z.y1+'px;width:'+(z.x2-z.x1)+'px;height:'+(z.y2-z.y1)+'px;border:1px solid rgba(255,255,255,.05);border-radius:7px;pointer-events:none';wrap.appendChild(bg);const lbl=document.createElement('div');lbl.className='sk-cat-lbl';lbl.textContent=z.cat;lbl.style.cssText='left:'+(z.x1+7)+'px;top:'+(z.y1+5)+'px';wrap.appendChild(lbl);});
+    chips.forEach(c=>{const z=zones.find(zz=>zz.cat===c.cat);if(z){c.zone={x1:z.x1+2,y1:z.y1+LH,x2:z.x2-2,y2:z.y2-4};}});
+  }
+  calcZones();
+  new ResizeObserver(calcZones).observe(wrap);
+  CONFIG.skills.forEach(cat=>{
+    const z=zones.find(zz=>zz.cat===cat.cat);if(!z)return;
+    cat.items.forEach(name=>{
+      const el=document.createElement('div');el.className='sk-chip';el.textContent=name;wrap.appendChild(el);
+      const w=Math.max(el.offsetWidth||60,56),h=el.offsetHeight||24;
+      chips.push({el,cat:cat.cat,x:z.x1+w/2+10+Math.random()*Math.max(10,z.x2-z.x1-w-20),y:z.y1+LH+h/2+Math.random()*Math.max(10,z.y2-z.y1-LH-h-8),vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.6,w,h,r:Math.max(w,h)/2+2,held:false,zone:{x1:z.x1+2,y1:z.y1+LH,x2:z.x2-2,y2:z.y2-4}});
+    });
+  });
+  let held=null,ox=0,oy=0;
+  const grab=(lx,ly)=>{for(let i=chips.length-1;i>=0;i--){const c=chips[i];if(Math.abs(lx-c.x)<c.w/2+6&&Math.abs(ly-c.y)<c.h/2+6){held=c;c.held=true;c.el.classList.add('held');ox=lx-c.x;oy=ly-c.y;break;}}};
+  const move=(lx,ly)=>{if(!held)return;const z=held.zone;held.x=Math.max(z.x1+held.w/2,Math.min(z.x2-held.w/2,lx-ox));held.y=Math.max(z.y1+held.h/2,Math.min(z.y2-held.h/2,ly-oy));held.vx=0;held.vy=0;};
+  const rel=()=>{if(held){held.held=false;held.el.classList.remove('held');held=null;}};
+  wrap.addEventListener('mousedown',e=>{const r=wrap.getBoundingClientRect();grab(e.clientX-r.left,e.clientY-r.top);});
+  document.addEventListener('mousemove',e=>{if(!held)return;const r=wrap.getBoundingClientRect();move(e.clientX-r.left,e.clientY-r.top);});
+  document.addEventListener('mouseup',rel);
+  (function tick(){chips.forEach((a,i)=>{if(!a.held){a.vx*=.82;a.vy*=.82;a.x+=a.vx;a.y+=a.vy;const z=a.zone,hw=a.w/2+2,hh=a.h/2+2;if(a.x-hw<z.x1){a.x=z.x1+hw;a.vx=Math.abs(a.vx)*.5;}if(a.x+hw>z.x2){a.x=z.x2-hw;a.vx=-Math.abs(a.vx)*.5;}if(a.y-hh<z.y1){a.y=z.y1+hh;a.vy=Math.abs(a.vy)*.5;}if(a.y+hh>z.y2){a.y=z.y2-hh;a.vy=-Math.abs(a.vy)*.5;}}for(let j=i+1;j<chips.length;j++){const b=chips[j];if(a.cat!==b.cat)continue;const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),min=a.r+b.r-2;if(d<min&&d>0){const f=(min-d)/min*.45,nx=dx/d,ny=dy/d;if(!a.held){a.vx-=nx*f;a.vy-=ny*f;}if(!b.held){b.vx+=nx*f;b.vy+=ny*f;}}}a.el.style.transform='translate('+(a.x-a.w/2)+'px,'+(a.y-a.h/2)+'px)';});requestAnimationFrame(tick);})();
+}
+
+let mapDone=false;
+function initMap(){if(mapDone)return;mapDone=true;setTimeout(()=>{const m=L.map('lmap',{zoomControl:false,attributionControl:false}).setView([CONFIG.location.lat,CONFIG.location.lng],9);L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',{maxZoom:16}).addTo(m);L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',{maxZoom:16}).addTo(m);L.circle([CONFIG.location.lat,CONFIG.location.lng],{radius:14000,color:'#C8A96E',weight:1.5,dashArray:'4 4',fillColor:'#C8A96E',fillOpacity:.16}).addTo(m);m.invalidateSize();},180);}
+
+function renderRichText(txt,excludeId){
+  const raw=String(txt||'');
+  const others=CONFIG.projects.filter(p=>p.id!==excludeId&&p.title).sort((a,b)=>b.title.length-a.title.length);
+  const parts=['\\[\\[([^\\]|]+)(?:\\|([^\\]]+))?\\]\\]','\\[([^\\]]+)\\]\\((https?:\/\/[^\\s)]+)\\)','\\*\\*([^*]+)\\*\\*','\\u0060([^\\u0060]+)\\u0060'];
+  if(others.length)parts.push('\\b('+others.map(p=>p.title.replace(/[.*+?^$(){}|[\]\\]/g,'\\$&')).join('|')+')\\b');
+  const re=new RegExp(parts.join('|'),'gi');
+  let out='',last=0,m;
+  while((m=re.exec(raw))!==null){
+    if(m.index>last)out+=esc(raw.slice(last,m.index));
+    if(m[1]){
+      const t=CONFIG.projects.find(p=>p.id===m[1].trim());
+      out+=t?'<button class="ps-ref-link" onclick="openProj(\''+esc(t.id)+'\')">'+esc((m[2]||t.title).trim())+' ↗</button>':esc(m[0]);
+    }else if(m[3]&&m[4]){
+      out+='<a class="ps-ext-link" href="'+esc(m[4])+'" target="_blank" rel="noreferrer">'+esc(m[3])+' ↗</a>';
+    }else if(m[5]){
+      out+='<strong>'+esc(m[5])+'</strong>';
+    }else if(m[6]){
+      out+='<code class="ps-ic">'+esc(m[6])+'</code>';
+    }else if(m[7]){
+      const t=others.find(p=>p.title.toLowerCase()===m[7].toLowerCase());
+      out+=t?'<button class="ps-ref-link" onclick="openProj(\''+esc(t.id)+'\')">'+esc(m[7])+' ↗</button>':esc(m[0]);
+    }
+    last=re.lastIndex;
+  }
+  if(last<raw.length)out+=esc(raw.slice(last));
+  return out;
+}
+function renderSec(s,excludeId){
+  switch(s.type){
+    case 'heading':return '<div class="ps-h2-wrap">'+(s.eyebrow?'<div class="ps-h2-eye">'+esc(s.eyebrow)+'</div>':'')+'<h2 class="ps-h2">'+esc(s.text)+'</h2></div>';
+    case 'subheading':return '<h3 class="ps-h3">● '+esc(s.text)+'</h3>';
+    case 'text':return '<p class="ps-p">'+renderRichText(s.content,excludeId)+'</p>';
+    case 'list':return '<ul class="ps-ul">'+s.items.map(i=>'<li>'+renderRichText(i,excludeId)+'</li>').join('')+'</ul>';
+    case 'callout':return '<div class="ps-callout"><div class="ps-callout-lbl">'+esc(s.label)+'</div><div class="ps-callout-ttl">'+esc(s.title)+'</div><p class="ps-p" style="margin:0">'+renderRichText(s.content,excludeId)+'</p></div>';
+    case 'split':{
+      if(s.layout==='media-pair'&&s.media2){
+        return '<div class="ps-split"><figure>'+renderMediaTag(s.media,s.mediaCaption||'')+(s.mediaCaption?'<figcaption>'+esc(s.mediaCaption)+'</figcaption>':'')+'</figure><figure>'+renderMediaTag(s.media2,s.media2Caption||'')+(s.media2Caption?'<figcaption>'+esc(s.media2Caption)+'</figcaption>':'')+'</figure></div>';
+      }
+      const txtCol='<div>'+(s.subtitle?'<div style="font-family:var(--mono);font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.4rem">'+esc(s.subtitle)+'</div>':'')+'<p class="ps-p" style="margin:0">'+renderRichText(s.content||'',excludeId)+'</p></div>';
+      const medCol='<figure>'+renderMediaTag(s.media,s.mediaCaption||'')+(s.mediaCaption?'<figcaption>'+esc(s.mediaCaption)+'</figcaption>':'')+'</figure>';
+      return '<div class="ps-split">'+(s.layout==='media-left'?medCol+txtCol:txtCol+medCol)+'</div>';
+    }
+    case 'extRef':{
+      const ok=s.url&&!s.url.startsWith('REPLACE')&&!s.url.startsWith('#');
+      const wrapTag=ok?'a href="'+esc(s.url)+'" target="_blank" rel="noreferrer"':'div';
+      return '<'+wrapTag+' style="display:flex;align-items:center;gap:1rem;margin:1.15rem 0;padding:1rem;border-radius:10px;border:1px solid rgba(124,168,185,.38);background:#11151E"><div style="font-size:1.35rem;color:var(--blue)">🔗</div><div style="flex:1;min-width:0"><div style="font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--blue)">'+esc(s.source||'Reference')+' · <span style="color:var(--text)">'+esc(s.title)+'</span>'+(ok?' ↗':'')+'</div>'+(s.note?'<div style="font-size:.76rem;color:var(--dim);margin-top:.2rem">'+renderRichText(s.note,excludeId)+'</div>':'')+'</div></'+(ok?'a':'div')+'>';
+    }
+    case 'image':case 'gif':case 'mp4':return '<figure class="ps-fig">'+renderMediaTag(s.src,s.caption||'')+(s.caption?'<figcaption>'+esc(s.caption)+'</figcaption>':'')+'</figure>';
+    case 'youtube':{const id=ytId(s.videoId);return id&&!id.startsWith('REPLACE')?'<div class="ps-yt"><iframe src="https://www.youtube.com/embed/'+esc(id)+'?rel=0" allowfullscreen></iframe></div>':'<div class="ps-code">YouTube video placeholder: set a valid YouTube ID or URL</div>';}
+    case 'code':return '<pre class="ps-code"><code>'+esc(s.content)+'</code></pre>';
+    case 'divider':return '<hr class="ps-hr">';
+    case 'projectRef':{const target=CONFIG.projects.find(p=>p.id===s.projectId);if(!target)return '';return '<div onclick="openProj(\''+esc(target.id)+'\')" style="cursor:pointer;margin:1.15rem 0;padding:1rem;border-radius:8px;border:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;gap:1rem"><div style="font-size:1.75rem">'+target.icon+'</div><div style="flex:1;min-width:0"><div style="font-family:var(--mono);font-size:.74rem;font-weight:700;color:var(--accent)">'+esc(target.title)+' · '+esc(target.engine)+' ↗</div><div style="font-size:.76rem;color:var(--dim);margin-top:.2rem">'+esc(s.note||target.desc)+'</div></div></div>';}
+    case 'gallery':{const cls=s.cols===3?'ps-gallery cols-3':'ps-gallery';return '<figure class="ps-fig"><div class="'+cls+'">'+(s.images||[]).map((u,idx)=>'<div>'+renderMediaTag(u,(s.captions&&s.captions[idx])||s.caption||'')+(s.captions&&s.captions[idx]?'<figcaption>'+renderRichText(s.captions[idx],excludeId)+'</figcaption>':'')+'</div>').join('')+'</div>'+(s.caption?'<figcaption style="margin-top:.6rem">'+esc(s.caption)+'</figcaption>':'')+'</figure>';}
+    default:return '';
+  }
+}
+
+let curProj=null;
+function openProj(id){
+  const p=CONFIG.projects.find(x=>x.id===id);if(!p)return;curProj=id;SFX.play('open');
+  const idx=CONFIG.projects.findIndex(x=>x.id===id);
+  document.getElementById('po-prev').disabled=idx===0;document.getElementById('po-next').disabled=idx===CONFIG.projects.length-1;
+  const links=Object.entries(p.links||{}).map(([k,v])=>'<a class="po-lnk" href="'+esc(v)+'" target="_blank">'+esc(k)+' ↗</a>').join('');
+  document.getElementById('po-content').innerHTML='<div style="margin-bottom:2rem"><div class="po-title">'+p.icon+' '+esc(p.title)+'</div><div class="po-meta">'+esc(p.engine)+' · '+esc(p.platform)+' · '+esc(p.year)+' · '+(p.status==='done'?'Completed':'In Progress')+'</div>'+(links?'<div class="po-links">'+links+'</div>':'')+'</div>'+p.sections.map(s=>renderSec(s,p.id)).join('');
+  const po=document.getElementById('po');po.classList.add('open');po.scrollTo({top:0,behavior:'smooth'});
+}
+function openCustomPage(id){
+  const cp=(CONFIG.customPages||[]).find(x=>x.id===id);if(!cp)return;curProj=null;SFX.play('open');
+  document.getElementById('po-content').innerHTML='<div style="margin-bottom:2rem"><div class="po-title">'+(cp.icon||'📄')+' '+esc(cp.title)+'</div><div class="po-meta">'+esc(cp.subtitle)+'</div></div>'+cp.sections.map(s=>renderSec(s,null)).join('');
+  const po=document.getElementById('po');po.classList.add('open');po.scrollTo({top:0,behavior:'smooth'});
+}
+function closeProj(){SFX.play('close');document.getElementById('po').classList.remove('open');curProj=null;}
+function navProj(d){if(!curProj)return;const i=CONFIG.projects.findIndex(x=>x.id===curProj);const n=CONFIG.projects[i+d];if(n)openProj(n.id);}
+
+function openArtLb(i){
+  const a=CONFIG.art[i];if(!a)return;const yt=ytId(a.youtubeId||'');const box=document.getElementById('lb-inner');
+  if(yt&&!yt.startsWith('REPLACE'))box.innerHTML='<div style="width:100%;max-width:860px;aspect-ratio:16/9"><iframe style="width:100%;height:100%;border:none;border-radius:8px" src="https://www.youtube.com/embed/'+esc(yt)+'?autoplay=1&rel=0" allowfullscreen></iframe></div>';
+  else if(isMp4(a.src))box.innerHTML='<video src="'+esc(a.src)+'" controls autoplay loop playsinline></video>';
+  else box.innerHTML=renderMediaTag(a.src,a.title,'');
+  document.getElementById('lb-cap').textContent=a.title+' · '+a.medium+' · '+a.year;
+  document.getElementById('lb').classList.add('open');
+}
+function closeLb(){document.getElementById('lb').classList.remove('open');document.getElementById('lb-inner').innerHTML='';}
+
+let pcBuf='';
+function showEgg(m){SFX.play('easter');document.getElementById('ee-icon').textContent=m.emoji;document.getElementById('ee-title').textContent=m.title;document.getElementById('ee-sub').textContent=m.subtitle;document.getElementById('egg').classList.add('open');}
+function closeEgg(){document.getElementById('egg').classList.remove('open');}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeLb();closeEgg();}
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  if(e.ctrlKey||e.altKey||e.metaKey||e.key.length>1)return;
+  pcBuf=(pcBuf+e.key.toUpperCase()).slice(-20);
+  const m=CONFIG.passcodes.find(p=>pcBuf.endsWith(p.code));
+  if(m){pcBuf='';showEgg(m);}
+});
+
+runLoader();
+</script>
 </body>
 </html>
